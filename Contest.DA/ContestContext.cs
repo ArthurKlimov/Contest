@@ -10,5 +10,7 @@ namespace Contest.DA
         {
             Database.EnsureCreated();
         }
+
+        public DbSet<ContestEntity> Contests { get; set; }
     }
 }
