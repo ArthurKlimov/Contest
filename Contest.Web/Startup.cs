@@ -1,3 +1,7 @@
+using AutoMapper;
+using Contest.BL.Interfaces;
+using Contest.BL.Mappings;
+using Contest.BL.Services;
 using Contest.DA;
 using Contest.DA.Entities;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +35,16 @@ namespace Contest.Web
             services.AddDbContext<ContestContext>(options => options.UseSqlServer(configuration.GetConnectionString("ContestContext")));
 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ContestContext>();
+
+            var mappingConfiguration = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new ContestProfile());
+            });
+
+            IMapper mapper = mappingConfiguration.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddScoped<IContestService, ContestService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
