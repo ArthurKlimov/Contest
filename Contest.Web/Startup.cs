@@ -20,7 +20,6 @@ namespace Contest.Web
 
         public Startup(IWebHostEnvironment environment)
         {
-
             var builder = new ConfigurationBuilder()
                 .SetBasePath(environment.ContentRootPath)
                 .AddJsonFile($"appsettings.json", true, true)

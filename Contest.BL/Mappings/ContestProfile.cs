@@ -9,6 +9,7 @@ namespace Contest.BL.Mappings
         public ContestProfile()
         {
             CreateMap<ContestEntity, ContestDto>();
+            CreateMap<ContestDto, ContestEntity>();
         }
     }
 }
