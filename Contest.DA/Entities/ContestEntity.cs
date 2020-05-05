@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Contest.DA.Entities
 {
+    [Table("Contests")]
     public class ContestEntity : BaseEntity
     {
         public string SmallDescription { get; set; }

@@ -16,23 +16,25 @@ namespace Contest.Web
 {
     public class Startup
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public Startup(IWebHostEnvironment environment)
         {
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(environment.ContentRootPath)
+                .AddJsonFile($"appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
         }
 
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
 
-            services.AddDbContext<ContestContext>(options => options.UseSqlServer(configuration.GetConnectionString("ContestContext")));
+            services.AddDbContext<ContestContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ContestContext")));
 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ContestContext>();
 
@@ -54,11 +56,18 @@ namespace Contest.Web
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseRouting();
+            
             app.UseAuthentication();
 
             app.UseAuthorization();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
