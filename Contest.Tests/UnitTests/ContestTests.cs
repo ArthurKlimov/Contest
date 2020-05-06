@@ -44,6 +44,7 @@ namespace Contest.Tests.UnitTests
                 Prize = "Вафельница",
                 StartDate = DateTime.Now,
                 EndDate = new DateTime(2021, 5, 5),
+                PublishDate = DateTime.Now,
                 Status = DA.Entities.ContestStatus.Created,
                 Views = 0,
                 Cover = ""

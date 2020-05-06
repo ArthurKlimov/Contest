@@ -34,6 +34,7 @@ namespace Contest.BL.Services
             if (!dto.Validate())
                 throw new ContestValidationException();
 
+            dto.PublishDate = DateTime.Now;
             var entity = _mapper.Map<ContestEntity>(dto);
 
             _db.Contests.Add(entity);

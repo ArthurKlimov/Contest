@@ -11,6 +11,7 @@ namespace Contest.BL.Dto.Contests
         public string Prize { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public DateTime PublishDate { get; set; }
         public ContestStatus Status { get; set; }
         public int Views { get; set; }
         public string Cover { get; set; }
