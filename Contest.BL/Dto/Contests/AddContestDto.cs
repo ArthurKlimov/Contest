@@ -1,9 +1,9 @@
 ﻿using Contest.DA.Entities;
 using System;
 
-namespace Contest.BL.Dto
+namespace Contest.BL.Dto.Contests
 {
-    public class ContestDto
+    public class AddContestDto
     {
         public string SmallDescription { get; set; }
         public string FullDescription { get; set; }

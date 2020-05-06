@@ -1,10 +1,10 @@
-﻿using Contest.BL.Dto;
+﻿using Contest.BL.Dto.Contests;
 
 namespace Contest.BL.Extensions
 {
     public static class ContestDtoExtension
     {
-        public static bool Validate(this ContestDto dto)
+        public static bool Validate(this AddContestDto dto)
         {
             if (dto.SmallDescription?.Length > 140 ||
                 string.IsNullOrWhiteSpace(dto.SmallDescription) ||
