@@ -8,7 +8,7 @@ namespace Contest.BL.Interfaces
     {
         Task AddContest(AddContestDto dto);
         Task<ContestDto> GetContest(BaseContestDto dto);
-        Task <PagedListDto<ContestDto>> GetAllContests(GetAllContestsDto dto);
+        Task <PagedListDto<ContestDto>> GetPublishedContests(GetAllContestsDto dto);
         Task EditContest(ContestDto dto);
         Task DeleteContest(BaseContestDto dto);
     }

@@ -46,12 +46,12 @@ namespace Contest.Web.Controllers.Api
         }
 
         [HttpGet]
-        [Route("paged")]
-        public async Task<IActionResult> GetAllContests(GetAllContestsDto dto)
+        [Route("published")]
+        public async Task<IActionResult> GetPublishedContests(GetAllContestsDto dto)
         {
             try
             {
-                var contests = await _contestService.GetAllContests(dto);
+                var contests = await _contestService.GetPublishedContests(dto);
                 return Ok(contests);
             }
             catch (NotFoundException)

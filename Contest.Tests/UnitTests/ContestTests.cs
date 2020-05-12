@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contest.BL.Dto;
+using Contest.BL.Dto.Contests;
 using Contest.BL.Interfaces;
 using Contest.BL.Mappings;
 using Contest.BL.Services;
@@ -36,21 +37,14 @@ namespace Contest.Tests.UnitTests
         [Test]
         public void AddContest()
         {
-            var dto = new ContestDto()
+            var dto = new AddContestDto()
             {
-                SmallDescription = "Small description",
+                SmallDescription = "",
                 FullDescription = "Full description",
                 Link = "https://www.youtube.com/",
-                Prize = "Вафельница",
-                StartDate = DateTime.Now,
-                EndDate = new DateTime(2021, 5, 5),
-                PublishDate = DateTime.Now,
-                Status = DA.Entities.ContestStatus.Created,
-                Views = 0,
-                Cover = ""
+                StartDate = DateTime.UtcNow,
+                EndDate = new DateTime(2020, 5, 5),
             };
-
-            _contestService.AddContest(dto);
 
             Assert.DoesNotThrow(() => _contestService.AddContest(dto));
         }

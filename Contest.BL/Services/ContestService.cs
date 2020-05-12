@@ -31,12 +31,14 @@ namespace Contest.BL.Services
 
         public async Task AddContest(AddContestDto dto)
         {
-            if (!dto.Validate())
+            if (!dto.IsValid())
                 throw new ContestValidationException();
 
-            dto.PublishDate = DateTime.Now;
-            var entity = _mapper.Map<ContestEntity>(dto);
+            var entity = _mapper.Map<AddContestDto, ContestEntity>(dto);
 
+            entity.PublishDate = DateTime.UtcNow;
+            entity.Status = ContestStatus.Created;
+            
             _db.Contests.Add(entity);
             await _db.SaveChangesAsync();
         }
@@ -44,12 +46,12 @@ namespace Contest.BL.Services
         public async Task<ContestDto> GetContest(BaseContestDto dto)
         {
             var entity = await FindContest(dto.ContestId);
-            var contest = _mapper.Map<ContestDto>(entity);
+            var contest = _mapper.Map<ContestEntity, ContestDto>(entity);
 
             return contest;
         }
 
-        public async Task<PagedListDto<ContestDto>> GetAllContests(GetAllContestsDto dto)
+        public async Task<PagedListDto<ContestDto>> GetPublishedContests(GetAllContestsDto dto)
         {
             if (dto.PageNumber <= 0 || dto.PageSize <= 0)
                 throw new BadRequestException();
@@ -91,15 +93,12 @@ namespace Contest.BL.Services
 
         public async Task EditContest(ContestDto dto)
         {
-            if (!dto.Validate())
-                throw new ContestValidationException();
+            //if (!dto.Validate())
+            //    throw new ContestValidationException();
 
             var entity = await FindContest(dto.Id);
-            if (entity == null)
-                throw new NotFoundException();
 
             entity = _mapper.Map<ContestDto, ContestEntity>(dto);
-            entity.Status = ContestStatus.Created;
 
             _db.Contests.Update(entity);
             await _db.SaveChangesAsync();
