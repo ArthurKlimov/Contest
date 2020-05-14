@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Contest.Web.Controllers.Api
 {
-    [Route("api/[controller]")]
+    [Route("api/contest")]
     [ApiController]
     public class ContestController : ControllerBase
     {
@@ -18,6 +18,7 @@ namespace Contest.Web.Controllers.Api
         }
 
         [HttpPost]
+        [Route("add")]
         public async Task<IActionResult> AddContest(AddContestDto dto)
         {
             try
@@ -31,70 +32,70 @@ namespace Contest.Web.Controllers.Api
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetContest(BaseContestDto dto)
-        {
-            try
-            {
-                var contest = await _contestService.GetContest(dto);
-                return Ok(contest);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetContest(BaseContestDto dto)
+        //{
+        //    try
+        //    {
+        //        var contest = await _contestService.GetContest(dto);
+        //        return Ok(contest);
+        //    }
+        //    catch (NotFoundException)
+        //    {
+        //        return NotFound();
+        //    }
+        //}
 
-        [HttpGet]
-        [Route("published")]
-        public async Task<IActionResult> GetPublishedContests(GetAllContestsDto dto)
-        {
-            try
-            {
-                var contests = await _contestService.GetPublishedContests(dto);
-                return Ok(contests);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-            catch (BadRequestException)
-            {
-                return BadRequest();
-            }
-        }
+        //[HttpGet]
+        //[Route("published")]
+        //public async Task<IActionResult> GetPublishedContests(GetAllContestsDto dto)
+        //{
+        //    try
+        //    {
+        //        var contests = await _contestService.GetPublishedContests(dto);
+        //        return Ok(contests);
+        //    }
+        //    catch (NotFoundException)
+        //    {
+        //        return NotFound();
+        //    }
+        //    catch (BadRequestException)
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
-        [HttpPut]
-        public async Task<IActionResult> EditContest(ContestDto dto)
-        {
-            try
-            {
-                await _contestService.EditContest(dto);
-                return Ok();
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-            catch (ContestValidationException)
-            {
-                return NotFound();
-            }
-        }
+        //[HttpPut]
+        //public async Task<IActionResult> EditContest(ContestDto dto)
+        //{
+        //    try
+        //    {
+        //        await _contestService.EditContest(dto);
+        //        return Ok();
+        //    }
+        //    catch (NotFoundException)
+        //    {
+        //        return NotFound();
+        //    }
+        //    catch (ContestValidationException)
+        //    {
+        //        return NotFound();
+        //    }
+        //}
 
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteContest(BaseContestDto dto)
-        {
-            try
-            {
-                await _contestService.DeleteContest(dto);
-                return Ok();
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-        }
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteContest(BaseContestDto dto)
+        //{
+        //    try
+        //    {
+        //        await _contestService.DeleteContest(dto);
+        //        return Ok();
+        //    }
+        //    catch (NotFoundException)
+        //    {
+        //        return NotFound();
+        //    }
+        //}
     }
 }

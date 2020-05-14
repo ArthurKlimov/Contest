@@ -5,10 +5,13 @@ namespace Contest.BL.Extensions
 {
     public static class AddContestDtoExtension
     {
+        private static readonly int currentYear = DateTime.UtcNow.Year;
+        private static readonly int nextYear = DateTime.UtcNow.Year + 1;
+
         public static bool IsValid(this AddContestDto dto)
         {
-            if (dto.StartDate.Year >= 2020 &&
-                dto.EndDate.Year >= 2020 &&
+            if ((dto.StartDate.Year == currentYear || dto.StartDate.Year == nextYear) &&
+                (dto.EndDate.Year == currentYear || dto.EndDate.Year == nextYear) &&
                 dto.EndDate >= dto.StartDate &&
                 !string.IsNullOrWhiteSpace(dto.SmallDescription) &&
                 !string.IsNullOrWhiteSpace(dto.FullDescription) &&

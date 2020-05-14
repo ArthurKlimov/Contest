@@ -1,1 +1,72 @@
-﻿
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container background-color-white pl-4 shadow-sm">
+        <div class="form-row pt-3">
+            <div class="col-6">
+                <h3 class="text-primary">Добавить конкурс на наш сайт</h3>
+            </div>
+        </div>
+
+        <div class="form-row mt-3">
+
+            <div class="col-3">
+                <input type="date" class="form-control" id="startDate"/>
+                <small class="form-text text-muted">Выберите дату начала кокунрса</small>
+            </div>
+
+            <div class="col-3">
+                <input type="date" class="form-control" id="endDate"/>
+                <small class="form-text text-muted">Выберите дату конца кокунрса</small>
+            </div>
+
+        </div>
+
+        <div class="form-row mt-3">
+
+            <div class="col-6">
+                <input id="smallDescription" type="text" class="form-control rounded-0 w-100" name="smallDescription">
+                <small class="form-text text-muted">Краткое описание конкурса, будет на главной странице. Максимум 140 символов</small>
+            </div>
+
+        </div>
+
+        <div class="form-row mt-3">
+            <div class="col-6">
+                <input id="link" type="text" class="form-control rounded-0 w-100" name="link">
+                <small class="form-text text-muted">Ссылка на пост/видео/новость</small>
+            </div>
+
+
+        </div>
+
+        <div class="form-row mt-3">
+
+            <div class="col-6">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="cover" accept="image/x-png,image/gif,image/jpeg" name="cover">
+                    <label class="custom-file-label rounded-0" for="cover" data-browse="Выбрать"></label>
+                    <small class="form-text text-muted">Обложка вашего конкурса</small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-row mt-3">
+            <div class="col-12">
+                <textarea id="fullDescription" name="fullDescription"></textarea>
+            </div>
+        </div>
+
+        <div class="form-row mt-3 d-flex justify-content-center pb-3">
+            <div class="col-3">
+                <button id="addContestButton" class="btn btn-primary w-100">Добавить</button>
+            </div>
+        </div>
+
+</div>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+<script src="~/js/add-contest.js"></script>
+
