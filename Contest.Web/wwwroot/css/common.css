@@ -1,5 +1,5 @@
 ﻿body {
-    background-color: #EDEEF0;
+    background-color: #fafafa;
 }
 
 nav {
@@ -53,4 +53,8 @@ footer {
 
 .border-radius-0 {
     border-radius: 0px;
+}
+
+.border-red {
+    border-color: #dc3545 !important;
 }

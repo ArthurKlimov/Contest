@@ -9,7 +9,6 @@ namespace Contest.DA.Entities
         public string SmallDescription { get; set; }
         public string FullDescription { get; set; }
         public string Link { get; set; }
-        public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime PublishDate { get; set; }
         public ContestStatus Status { get; set; }

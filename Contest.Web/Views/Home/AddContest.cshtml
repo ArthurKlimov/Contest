@@ -2,70 +2,102 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container background-color-white pl-4 shadow-sm">
-        <div class="form-row pt-3">
-            <div class="col-6">
-                <h3 class="text-primary">Добавить конкурс на наш сайт</h3>
-            </div>
-        </div>
-
-        <div class="form-row mt-3">
-
-            <div class="col-3">
-                <input type="date" class="form-control" id="startDate"/>
-                <small class="form-text text-muted">Выберите дату начала кокунрса</small>
-            </div>
-
-            <div class="col-3">
-                <input type="date" class="form-control" id="endDate"/>
-                <small class="form-text text-muted">Выберите дату конца кокунрса</small>
-            </div>
-
-        </div>
-
-        <div class="form-row mt-3">
-
-            <div class="col-6">
-                <input id="smallDescription" type="text" class="form-control rounded-0 w-100" name="smallDescription">
-                <small class="form-text text-muted">Краткое описание конкурса, будет на главной странице. Максимум 140 символов</small>
-            </div>
-
-        </div>
-
-        <div class="form-row mt-3">
-            <div class="col-6">
-                <input id="link" type="text" class="form-control rounded-0 w-100" name="link">
-                <small class="form-text text-muted">Ссылка на пост/видео/новость</small>
-            </div>
-
-
-        </div>
-
-        <div class="form-row mt-3">
-
-            <div class="col-6">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="cover" accept="image/x-png,image/gif,image/jpeg" name="cover">
-                    <label class="custom-file-label rounded-0" for="cover" data-browse="Выбрать"></label>
-                    <small class="form-text text-muted">Обложка вашего конкурса</small>
+    <div class="container background-color-white pl-4 shadow-sm border">
+        <form id="form" action="/api/contest/add" method="post">
+            <div class="form-row pt-3">
+                <div class="col-6">
+                    <h3 class="text-primary mb-1">Добавить конкурс на наш сайт</h3>
+                    <small class="form-text text-muted">Все поля со * - обязательные.</small>
                 </div>
             </div>
 
-        </div>
+            <div class="form-row mt-3">
+                <div class="col-3">
+                    <input type="date" class="form-control" id="endDate" min="2020-01-01" max="2021-12-31" />
+                    <small class="form-text text-muted">* Дедлайн (дата конца конкурса)</small>
+                </div>
+            </div>
 
-        <div class="form-row mt-3">
-            <div class="col-12">
-                <textarea id="fullDescription" name="fullDescription"></textarea>
+            <div class="form-row mt-3">
+                <div class="col-6">
+                    <input id="smallDescription" type="text" class="form-control rounded-0 w-100" name="smallDescription">
+                    <small class="form-text text-muted">* Краткое описание, будет на главной странице. Максимум 140 символов</small>
+                </div>
+            </div>
+
+            <div class="form-row mt-3">
+                <div class="col-6">
+                    <input id="link" type="text" class="form-control rounded-0 w-100" name="link">
+                    <small class="form-text text-muted">* Ссылка на пост/видео/новость. Максимум 140 символов</small>
+                </div>
+            </div>
+
+            <div class="form-row mt-3">
+
+                <div class="col-6">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="cover" accept="image/x-png,image/gif,image/jpeg" name="cover">
+                        <label class="custom-file-label rounded-0" for="cover" data-browse="Выбрать"></label>
+                        <small class="form-text text-muted">Обложка</small>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-row mt-3">
+                <div class="col-12">
+                    <small class="form-text text-muted">Полное описание условий, будет только на странице конкурса. Максимум 2500 символов</small>
+                    <textarea id="fullDescription" name="fullDescription" maxlength="2500"></textarea>
+                </div>
+            </div>
+
+            <div class="form-row mt-3 d-flex justify-content-center pb-3">
+                <div class="col-3">
+                    <input type="submit" class="btn btn-primary w-100" value="Добавить">
+                </div>
+            </div>
+        </form>
+
+        <div class="modal fade" id="successModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-success" id="staticBackdropLabel">Успех! Конкурс загружен на наш сайт.</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            <span class="font-weight-bold">Осталось совсем чуть-чуть: конкурс должен пройти модерацию.</span> Обычно это занимает от 5 минут до 1 часа.
+                            <br />
+                            После модерации ваш конкурс попадет на главную страницу.
+                        </p>
+
+                        <p class="font-weight-bold">Вы можете редактировать конкурс через ссылку, которую мы отправили вам на почту.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Понятно</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="form-row mt-3 d-flex justify-content-center pb-3">
-            <div class="col-3">
-                <button id="addContestButton" class="btn btn-primary w-100">Добавить</button>
+        <div class="modal fade" id="failModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-success text-danger" id="staticBackdropLabel">Упс! Что-то пошло не так...</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Попробуйте еще раз позже или обратитесь в поддержку!
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Понятно</button>
+                    </div>
+                </div>
             </div>
         </div>
-
-</div>
+    </div>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 <script src="~/js/add-contest.js"></script>

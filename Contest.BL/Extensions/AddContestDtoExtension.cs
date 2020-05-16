@@ -10,12 +10,12 @@ namespace Contest.BL.Extensions
 
         public static bool IsValid(this AddContestDto dto)
         {
-            if ((dto.StartDate.Year == currentYear || dto.StartDate.Year == nextYear) &&
-                (dto.EndDate.Year == currentYear || dto.EndDate.Year == nextYear) &&
-                dto.EndDate >= dto.StartDate &&
+            if ((dto.EndDate.Year == currentYear || dto.EndDate.Year == nextYear) &&
                 !string.IsNullOrWhiteSpace(dto.SmallDescription) &&
-                !string.IsNullOrWhiteSpace(dto.FullDescription) &&
-                dto.SmallDescription?.Length <= 140 && dto.FullDescription?.Length <= 2500)
+                !string.IsNullOrWhiteSpace(dto.Link) &&
+                dto.SmallDescription?.Length <= 140 && 
+                dto.FullDescription?.Length <= 2500 &&
+                dto.Link?.Length <= 140)
             {
                 return true;
             }

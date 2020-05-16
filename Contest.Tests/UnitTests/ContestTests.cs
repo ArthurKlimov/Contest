@@ -42,7 +42,6 @@ namespace Contest.Tests.UnitTests
                 SmallDescription = "",
                 FullDescription = "Full description",
                 Link = "https://www.youtube.com/",
-                StartDate = DateTime.UtcNow,
                 EndDate = new DateTime(2020, 5, 5),
             };
 
