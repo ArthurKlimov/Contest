@@ -7,9 +7,9 @@ namespace Contest.BL.Interfaces
     public interface IContestService
     {
         Task AddContest(AddContestDto dto);
-        Task<ContestDto> GetContest(BaseContestDto dto);
+        //Task<ContestDto> GetContest(BaseContestDto dto);
         Task <PagedListDto<ContestDto>> GetContests(GetContestsDto dto);
-        Task EditContest(ContestDto dto);
-        Task DeleteContest(BaseContestDto dto);
+        //Task EditContest(ContestDto dto);
+        //Task DeleteContest(BaseContestDto dto);
     }
 }

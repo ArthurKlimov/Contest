@@ -15,7 +15,7 @@ namespace Contest.Web.Controllers
             _contestService = contestService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery])
         {
             var contests = await _contestService.GetContests(new GetContestsDto());
             var viewModel = new HomeViewModel(contests?.Items);

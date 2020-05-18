@@ -41,13 +41,13 @@ namespace Contest.BL.Services
             await _db.SaveChangesAsync();
         }
 
-        public async Task<ContestDto> GetContest(BaseContestDto dto)
-        {
-            var entity = await FindContest(dto.ContestId);
-            var contest = _mapper.Map<ContestEntity, ContestDto>(entity);
+        //public async Task<ContestDto> GetContest(BaseContestDto dto)
+        //{
+        //    var entity = await FindContest(dto.ContestId);
+        //    var contest = _mapper.Map<ContestEntity, ContestDto>(entity);
 
-            return contest;
-        }
+        //    return contest;
+        //}
 
         public async Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto)
         {
@@ -63,7 +63,7 @@ namespace Contest.BL.Services
 
             if (!string.IsNullOrWhiteSpace(dto.Search))
                 entities = entities.Where(e => e.SmallDescription.Contains(dto.Search)).ToList();
-            
+
             if (entities == null)
                 throw new NotFoundException();
 
@@ -88,37 +88,37 @@ namespace Contest.BL.Services
             return new PagedListDto<ContestDto>(dto.PageNumber, dto.PageSize, contests.Count, contests);
         }
 
-        public async Task EditContest(ContestDto dto)
-        {
-            //if (!dto.Validate())
-            //    throw new ContestValidationException();
+        //public async Task EditContest(ContestDto dto)
+        //{
+        //    //if (!dto.Validate())
+        //    //    throw new ContestValidationException();
 
-            var entity = await FindContest(dto.Id);
+        //    var entity = await FindContest(dto.Id);
 
-            entity = _mapper.Map<ContestDto, ContestEntity>(dto);
+        //    entity = _mapper.Map<ContestDto, ContestEntity>(dto);
 
-            _db.Contests.Update(entity);
-            await _db.SaveChangesAsync();
-        }
+        //    _db.Contests.Update(entity);
+        //    await _db.SaveChangesAsync();
+        //}
 
-        public async Task DeleteContest(BaseContestDto dto)
-        {
-            var entity = await FindContest(dto.ContestId);
+        //public async Task DeleteContest(BaseContestDto dto)
+        //{
+        //    var entity = await FindContest(dto.ContestId);
 
-            _db.Contests.Remove(entity);
-            await _db.SaveChangesAsync();
-        }
+        //    _db.Contests.Remove(entity);
+        //    await _db.SaveChangesAsync();
+        //}
 
-        private async Task<ContestEntity> FindContest(int contestId)
-        {
-            if (contestId <= 0)
-                throw new NotFoundException();
+        //private async Task<ContestEntity> FindContest(int contestId)
+        //{
+        //    if (contestId <= 0)
+        //        throw new NotFoundException();
 
-            var entity = await _db.Contests.FirstOrDefaultAsync(e => e.Id == contestId);
-            if (entity == null)
-                throw new NotFoundException();
+        //    var entity = await _db.Contests.FirstOrDefaultAsync(e => e.Id == contestId);
+        //    if (entity == null)
+        //        throw new NotFoundException();
 
-            return entity;
-        }
+        //    return entity;
+        //}
     }
 }

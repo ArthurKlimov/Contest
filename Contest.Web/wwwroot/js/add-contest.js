@@ -1,10 +1,5 @@
 ﻿$(document).ready(function () {
 
-    $('#cover').on('change', function () {
-        var fileName = $(this).val().replace('C:\\fakepath\\', " ")
-        $(this).next('.custom-file-label').html(fileName);
-    })
-
     $('#fullDescription').summernote({
         height: 300,
         toolbar: [
@@ -14,8 +9,48 @@
         ]
     });
 
-    $('#form').submit(function (e) {
+    $('#cover').change(function () {
+        var fileName = $(this).val().replace('C:\\fakepath\\', " ")
+        $(this).next('.custom-file-label').html(fileName);
+    })
 
+    $("#endDate").change(function () {
+        if ($(this).hasClass("is-invalid") && $(this).val() !== "") {
+            $(this).removeClass("is-invalid");
+        }
+        else {
+            $(this).addClass("is-invalid");
+        }
+    });
+
+    $("#smallDescription").change(function () {
+        if ($(this).hasClass("is-invalid") && $(this).val() !== "" && $(this).val().length <= 140) {
+            $(this).removeClass("is-invalid");
+        }
+        else {
+            $(this).addClass("is-invalid");
+        }
+    });
+
+    $("#link").change(function () {
+        if ($(this).hasClass("is-invalid") && $(this).val() !== "" && $(this).val().length <= 140) {
+            $(this).removeClass("is-invalid");
+        }
+        else {
+            $(this).addClass("is-invalid");
+        }
+    });
+
+    $("#fullDescription").change(function () {
+        if ($(this).hasClass("is-invalid") && $(this).val().length <= 2500) {
+            $(this).removeClass("is-invalid");
+        }
+        else {
+            $(this).addClass("is-invalid");
+        }
+    });
+
+    $('#form').submit(function (e) {
         e.preventDefault();
 
         var isValid = true;
@@ -25,7 +60,7 @@
         var fullDescription = $('#fullDescription').val();
 
         if (endDate === "") {
-            $("#endDate").addClass("is-invalid ");
+            $("#endDate").addClass("is-invalid");
             isValid = false;
         }
 
@@ -33,9 +68,12 @@
             $("#smallDescription").addClass("is-invalid");
             isValid = false;
         }
-
         if (link === "" || link.length > 140) {
             $("#link").addClass("is-invalid");
+            isValid = false;
+        }
+        if (fullDescription === "" || fullDescription.length > 2500) {
+            $("#fullDescription").addClass("is-invalid");
             isValid = false;
         }
 
@@ -67,22 +105,5 @@
 
     });
 
-    $("#endDate").change(function () {
-        if ($(this).hasClass("is-invalid") && $(this).val() !== "") {
-            $(this).removeClass("is-invalid");
-        }
-    });
-
-    $("#smallDescription").change(function () {
-        if ($(this).hasClass("is-invalid") && $(this).val() !== "" && $(this).val().length <= 140) {
-            $(this).removeClass("is-invalid");
-        }
-    });
-
-    $("#link").change(function () {
-        if ($(this).hasClass("is-invalid") && $(this).val() !== "" && $(this).val().length <= 140) {
-            $(this).removeClass("is-invalid");
-        }
-    });
 
 });
