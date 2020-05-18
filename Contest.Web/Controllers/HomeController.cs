@@ -1,5 +1,8 @@
-﻿using Contest.BL.Interfaces;
+﻿using Contest.BL.Dto;
+using Contest.BL.Interfaces;
+using Contest.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Contest.Web.Controllers
 {
@@ -12,9 +15,12 @@ namespace Contest.Web.Controllers
             _contestService = contestService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var contests = await _contestService.GetContests(new GetContestsDto());
+            var viewModel = new HomeViewModel(contests?.Items);
+            
+            return View(viewModel);
         }
 
         public IActionResult AddContest()

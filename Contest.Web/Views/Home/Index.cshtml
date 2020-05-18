@@ -1,6 +1,13 @@
-﻿
+﻿@model Contest.Web.ViewModels.HomeViewModel
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@await Html.PartialAsync("Index/_Filter")
+
+@if (Model.Contests?.Count > 2)
+{
+    @await Html.PartialAsync("Index/_CardRowLeft", new List<Contest.BL.Dto.ContestDto> { Model.Contests[0], Model.Contests[1] })
+}
 

@@ -11,10 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Xml;
+using Contest.BL.Enums;
 
 namespace Contest.BL.Services
 {
@@ -51,40 +49,39 @@ namespace Contest.BL.Services
             return contest;
         }
 
-        public async Task<PagedListDto<ContestDto>> GetPublishedContests(GetAllContestsDto dto)
+        public async Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto)
         {
             if (dto.PageNumber <= 0 || dto.PageSize <= 0)
                 throw new BadRequestException();
 
+            //временно
+            dto.Status = ContestStatus.Created;
+
             var entities = await _db.Contests
-                .Where(e => e.Status == ContestStatus.Published && e.EndDate <= DateTime.Now)
+                .Where(e => e.Status == dto.Status)
                 .ToListAsync();
 
+            if (!string.IsNullOrWhiteSpace(dto.Search))
+                entities = entities.Where(e => e.SmallDescription.Contains(dto.Search)).ToList();
+            
             if (entities == null)
                 throw new NotFoundException();
 
-            if (!string.IsNullOrWhiteSpace(dto.Search))
-            {
-                entities = entities.Where(e => e.SmallDescription.Contains(dto.Search)).ToList();
-            }
-
-            if (dto.IsPopular)
+            if (dto.Sort == ContestsSortType.Popular)
             {
                 entities = entities.OrderByDescending(e => e.Views).ToList();
             }
-            else if (dto.IsNew)
+            else if (dto.Sort == ContestsSortType.New)
             {
                 entities = entities.OrderByDescending(e => e.PublishDate).ToList();
             }
-            else if (dto.IsAlmostClosed)
+            else if (dto.Sort == ContestsSortType.AlmostClosed)
             {
                 entities = entities.OrderBy(e => e.EndDate).ToList();
             }
 
             entities = entities
-                .Take(dto.PageSize)
-                .Skip(dto.PageSize * dto.PageNumber)
-                .ToList();
+                .Skip(dto.PageSize * (dto.PageNumber - 1)).Take(dto.PageSize).ToList();
 
             var contests = _mapper.Map<List<ContestEntity>, List<ContestDto>>(entities);
 
