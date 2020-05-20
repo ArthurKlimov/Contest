@@ -11,16 +11,8 @@ namespace Contest.DA.Entities
         public string Link { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime PublishDate { get; set; }
-        public ContestStatus Status { get; set; }
         public int Views { get; set; }
-        public string Cover { get; set; }
-    }
-
-    public enum ContestStatus
-    {
-        Created,
-        Returned,
-        Published,
-        Hidden,
+        public string CoverPath { get; set; }
+        public bool IsPublished { get; set; }
     }
 }

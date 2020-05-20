@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contest.BL", "Contest.BL\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contest.DA", "Contest.DA\Contest.DA.csproj", "{0B08692D-AEFB-4AE7-9025-E32AED4A0257}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contest.Tests", "Contest.Tests\Contest.Tests.csproj", "{17F3A8D6-B7E5-4D00-B8DA-1724C89799F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contest.Tests", "Contest.Tests\Contest.Tests.csproj", "{17F3A8D6-B7E5-4D00-B8DA-1724C89799F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

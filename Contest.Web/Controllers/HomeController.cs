@@ -15,15 +15,12 @@ namespace Contest.Web.Controllers
             _contestService = contestService;
         }
 
-        public async Task<IActionResult> Index([FromQuery])
+        public async Task<IActionResult> Index()
         {
-            var contests = await _contestService.GetContests(new GetContestsDto());
-            var viewModel = new HomeViewModel(contests?.Items);
-            
-            return View(viewModel);
+            return View();
         }
 
-        public IActionResult AddContest()
+        public async Task<IActionResult> AddContest()
         {
             return View();
         }

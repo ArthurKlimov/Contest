@@ -12,10 +12,10 @@ namespace Contest.BL.Extensions
         {
             if ((dto.EndDate.Year == currentYear || dto.EndDate.Year == nextYear) &&
                 !string.IsNullOrWhiteSpace(dto.SmallDescription) &&
-                !string.IsNullOrWhiteSpace(dto.Link) &&
                 dto.SmallDescription?.Length <= 140 && 
-                dto.FullDescription?.Length <= 2500 &&
-                dto.Link?.Length <= 140)
+                !string.IsNullOrWhiteSpace(dto.Link) &&
+                dto.Link?.Length <= 140 &&
+                dto.FullDescription?.Length <= 2500)
             {
                 return true;
             }

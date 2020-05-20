@@ -29,96 +29,46 @@ namespace Contest.BL.Services
 
         public async Task AddContest(AddContestDto dto)
         {
-            if (!dto.IsValid())
+            if(!dto.IsValid())
                 throw new ContestValidationException();
 
             var entity = _mapper.Map<AddContestDto, ContestEntity>(dto);
-
             entity.PublishDate = DateTime.UtcNow;
-            entity.Status = ContestStatus.Created;
             
             _db.Contests.Add(entity);
             await _db.SaveChangesAsync();
         }
 
-        //public async Task<ContestDto> GetContest(BaseContestDto dto)
-        //{
-        //    var entity = await FindContest(dto.ContestId);
-        //    var contest = _mapper.Map<ContestEntity, ContestDto>(entity);
-
-        //    return contest;
-        //}
-
         public async Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto)
         {
-            if (dto.PageNumber <= 0 || dto.PageSize <= 0)
+            if(dto.PageNumber <= 0 || dto.PageSize <= 0)
                 throw new BadRequestException();
 
-            //временно
-            dto.Status = ContestStatus.Created;
+            var query = _db.Contests
+                           .Where(x => x.IsPublished);
 
-            var entities = await _db.Contests
-                .Where(e => e.Status == dto.Status)
-                .ToListAsync();
+            if(!string.IsNullOrWhiteSpace(dto.Search))
+                query = query.Where(e => e.SmallDescription.Contains(dto.Search));
 
-            if (!string.IsNullOrWhiteSpace(dto.Search))
-                entities = entities.Where(e => e.SmallDescription.Contains(dto.Search)).ToList();
-
-            if (entities == null)
+            if(query == null)
                 throw new NotFoundException();
 
-            if (dto.Sort == ContestsSortType.Popular)
-            {
-                entities = entities.OrderByDescending(e => e.Views).ToList();
-            }
-            else if (dto.Sort == ContestsSortType.New)
-            {
-                entities = entities.OrderByDescending(e => e.PublishDate).ToList();
-            }
-            else if (dto.Sort == ContestsSortType.AlmostClosed)
-            {
-                entities = entities.OrderBy(e => e.EndDate).ToList();
-            }
+            if(dto.Sort == ContestsSortType.Popular)
+                query = query.OrderByDescending(e => e.Views);
 
-            entities = entities
-                .Skip(dto.PageSize * (dto.PageNumber - 1)).Take(dto.PageSize).ToList();
+            if(dto.Sort == ContestsSortType.New)
+                query = query.OrderByDescending(e => e.PublishDate);
+
+            if(dto.Sort == ContestsSortType.AlmostClosed)
+                query = query.OrderBy(e => e.EndDate);
+
+            var entities = await query.Skip(dto.PageSize * (dto.PageNumber - 1))
+                                      .Take(dto.PageSize)
+                                      .ToListAsync();
 
             var contests = _mapper.Map<List<ContestEntity>, List<ContestDto>>(entities);
 
             return new PagedListDto<ContestDto>(dto.PageNumber, dto.PageSize, contests.Count, contests);
         }
-
-        //public async Task EditContest(ContestDto dto)
-        //{
-        //    //if (!dto.Validate())
-        //    //    throw new ContestValidationException();
-
-        //    var entity = await FindContest(dto.Id);
-
-        //    entity = _mapper.Map<ContestDto, ContestEntity>(dto);
-
-        //    _db.Contests.Update(entity);
-        //    await _db.SaveChangesAsync();
-        //}
-
-        //public async Task DeleteContest(BaseContestDto dto)
-        //{
-        //    var entity = await FindContest(dto.ContestId);
-
-        //    _db.Contests.Remove(entity);
-        //    await _db.SaveChangesAsync();
-        //}
-
-        //private async Task<ContestEntity> FindContest(int contestId)
-        //{
-        //    if (contestId <= 0)
-        //        throw new NotFoundException();
-
-        //    var entity = await _db.Contests.FirstOrDefaultAsync(e => e.Id == contestId);
-        //    if (entity == null)
-        //        throw new NotFoundException();
-
-        //    return entity;
-        //}
     }
 }
