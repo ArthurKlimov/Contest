@@ -27,7 +27,7 @@ namespace Contest.BL.Services
             _mapper = mapper;
         }
 
-        public async Task AddContest(AddContestDto dto)
+        public async Task<int> AddContest(AddContestDto dto)
         {
             if(!dto.IsValid())
                 throw new ContestValidationException();
@@ -37,6 +37,8 @@ namespace Contest.BL.Services
             
             _db.Contests.Add(entity);
             await _db.SaveChangesAsync();
+
+            return entity.Id;
         }
 
         public async Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto)
@@ -45,7 +47,7 @@ namespace Contest.BL.Services
                 throw new BadRequestException();
 
             var query = _db.Contests
-                           .Where(x => x.IsPublished);
+                           .Where(x => x.IsPublished || !x.IsPublished);
 
             if(!string.IsNullOrWhiteSpace(dto.Search))
                 query = query.Where(e => e.SmallDescription.Contains(dto.Search));

@@ -1,15 +1,8 @@
-﻿@model Contest.Web.ViewModels.HomeViewModel
+﻿@model List<Contest.BL.Dto.ContestDto>
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-
-@await Html.PartialAsync("Index/_Filter")
-
-<div class="container">
-    <div class="row">
-        @foreach()
+<div class="row">
+    @foreach (var contest in Model)
+    {
         <div class="col-4">
             <div class="card" style="height: 27em;">
                 <img src="@contest.CoverPath" class="card-img-top h-50 w-100" style="object-fit: cover">
@@ -28,6 +21,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    }
 </div>
-

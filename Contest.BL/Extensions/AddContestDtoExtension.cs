@@ -15,7 +15,7 @@ namespace Contest.BL.Extensions
                 dto.SmallDescription?.Length <= 140 && 
                 !string.IsNullOrWhiteSpace(dto.Link) &&
                 dto.Link?.Length <= 140 &&
-                dto.FullDescription?.Length <= 2500)
+                (dto.FullDescription?.Length <= 2500 || dto.FullDescription == null))
             {
                 return true;
             }

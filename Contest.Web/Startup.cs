@@ -46,6 +46,7 @@ namespace Contest.Web
             services.AddSingleton(mapper);
 
             services.AddScoped<IContestService, ContestService>();
+            services.AddScoped<IImageService, ImageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
