@@ -47,7 +47,7 @@ namespace Contest.BL.Services
                 throw new BadRequestException();
 
             var query = _db.Contests
-                           .Where(x => x.IsPublished || !x.IsPublished);
+                           .Where(x => x.EndDate >= DateTime.UtcNow);
 
             if(!string.IsNullOrWhiteSpace(dto.Search))
                 query = query.Where(e => e.SmallDescription.Contains(dto.Search));
@@ -64,13 +64,22 @@ namespace Contest.BL.Services
             if(dto.Sort == ContestsSortType.AlmostClosed)
                 query = query.OrderBy(e => e.EndDate);
 
+            var totalCount = query.Count();
+
             var entities = await query.Skip(dto.PageSize * (dto.PageNumber - 1))
                                       .Take(dto.PageSize)
                                       .ToListAsync();
 
             var contests = _mapper.Map<List<ContestEntity>, List<ContestDto>>(entities);
 
-            return new PagedListDto<ContestDto>(dto.PageNumber, dto.PageSize, contests.Count, contests);
+            foreach (var contest in contests)
+            {
+                contest.EndDateString = contest.EndDate.ParseToDateAndMonth();
+                contest.PublishDateString = contest.PublishDate.ParseToTimeDifference();
+            }
+
+            return new PagedListDto<ContestDto>(dto.PageNumber, dto.PageSize, totalCount, contests);
         }
+
     }
 }

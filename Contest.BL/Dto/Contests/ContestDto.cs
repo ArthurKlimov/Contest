@@ -7,8 +7,11 @@ namespace Contest.BL.Dto
     {
         public int Id { get; set; }
         public DateTime PublishDate { get; set; }
+        public string PublishDateString { get; set; }
+        public string EndDateString { get; set; }
         public string CoverPath { get; set; }
         public bool IsPublished { get; set; }
         public string Views { get; set; }
+
     }
 }

@@ -8,12 +8,19 @@ namespace Contest.Web.ViewModels
 {
     public class HomeViewModel
     {
-        public HomeViewModel(List<ContestDto> contests)
+        public HomeViewModel()
         {
-            Contests = new List<ContestDto>();
-            Contests = contests;
         }
 
-        public List<ContestDto> Contests { get; set; }
+        public HomeViewModel(PagedListDto<ContestDto> contests, string sort, string search)
+        {
+            Contests = contests;
+            Sort = sort;
+            Search = search;
+        }
+
+        public PagedListDto<ContestDto> Contests { get; set; }
+        public string Sort { get; set; }
+        public string Search { get; set; }
     }
 }

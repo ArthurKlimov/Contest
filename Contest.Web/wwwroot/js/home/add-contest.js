@@ -55,7 +55,7 @@
             formData.append("coverImage", coverImageInput[0].files[0]);
 
             $.ajax({
-                url: '/addContest',
+                url: '/contests/add',
                 type: 'POST',
                 data: formData,
                 cache: false,
@@ -69,7 +69,5 @@
                     $('#failModal').modal();
                 })
         }
-
-        debugger
     });
 });

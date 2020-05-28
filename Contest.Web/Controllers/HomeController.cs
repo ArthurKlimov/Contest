@@ -1,11 +1,13 @@
 ﻿using Contest.BL.Dto;
 using Contest.BL.Dto.Contests;
+using Contest.BL.Enums;
 using Contest.BL.Exceptions;
 using Contest.BL.Extensions;
 using Contest.BL.Interfaces;
 using Contest.Web.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using System;
 using System.Threading.Tasks;
 
@@ -15,66 +17,22 @@ namespace Contest.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IContestService _contestService;
-        private readonly IImageService _imageService;
 
-        public HomeController(IContestService contestService, IImageService imageService)
+        public HomeController(IContestService contestService)
         {
             _contestService = contestService;
-            _imageService = imageService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort = "Popular", string search = "")
         {
-            var dto = new GetContestsDto()
-            {
-                PageNumber = 1,
-                PageSize = 10,
-                Search = "",
-                Sort = BL.Enums.ContestsSortType.Popular
-             };
+            Enum.TryParse(sort, out ContestsSortType sortType);
 
+            var dto = new GetContestsDto(sortType, search, 1, 12);
             var contests = await _contestService.GetContests(dto);
-            return View(new HomeViewModel(contests.Items));
-        }
 
-        [HttpGet]
-        [Route("/addContest")]
-        public async Task<IActionResult> AddContest()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Route("/addContest")]
-        public async Task<IActionResult> AddContest([FromForm] AddContestDto dto, [FromForm] IFormFile coverImage)
-        {
-            try
-            { 
-                var contestId = await _contestService.AddContest(dto);
-
-                if (coverImage != null)
-                {
-                    var coverImageBytes = coverImage.OpenReadStream().GetBytes();
-                    var coverImageType = coverImage.ContentType;
-
-                    await _imageService.UploadContestCover(coverImageBytes, coverImageType, contestId);
-                }
-            }
-            catch (ContestValidationException)
-            {
-                return BadRequest();
-            }
-            catch (BadImageFormatException)
-            {
-                return BadRequest();
-            }
-            catch (ImageProcessingException)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-
-            return Ok();
+            var vm = new HomeViewModel(contests, sort, search);
+            return View(vm);
         }
     }
 }
