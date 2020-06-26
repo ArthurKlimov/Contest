@@ -23,7 +23,7 @@ namespace Contest.BL.Services
             _db = db;
         }
 
-        public async Task UploadContestCover(byte[] coverImageBytes, string coverImageType, int contestId)
+        public async Task UploadContestCover(byte[] coverImageBytes, int contestId)
         {
             var contest = await _db.Contests.FirstOrDefaultAsync(x => x.Id == contestId);
             if (contest == null)
@@ -31,17 +31,14 @@ namespace Contest.BL.Services
                 throw new NotFoundException();
             }
 
-            var coverPath = await UploadImage(coverImageBytes, @"images\covers\", coverImageType);
+            var coverPath = await UploadImage(coverImageBytes, @"images\covers\");
             contest.CoverPath = coverPath;
 
             await _db.SaveChangesAsync();
         }
 
-        private async Task<string> UploadImage(byte[] imageBytes, string path, string imageType)
+        private async Task<string> UploadImage(byte[] imageBytes, string path)
         {
-            if (!imageType.StartsWith("image/"))
-                throw new BadImageFormatException();
-
             if (imageBytes.Length > 5242880)
                 throw new BadRequestException();
 

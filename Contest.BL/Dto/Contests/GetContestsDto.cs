@@ -1,8 +1,4 @@
-﻿using Contest.BL.Enums;
-using Contest.DA.Entities;
-using System;
-
-namespace Contest.BL.Dto
+﻿namespace Contest.BL.Dto
 {
     public class GetContestsDto
     {
@@ -11,17 +7,25 @@ namespace Contest.BL.Dto
 
         }
 
-        public GetContestsDto(ContestsSortType sortType, string search, int pageNumber, int pageSize)
+        public GetContestsDto(string sort, string search)
         {
-            Sort = sortType;
+            Sort = sort;
             Search = search;
-            PageNumber = pageNumber;
-            PageSize = pageSize;
+            PageNumber = 1;
+            PageSize = 20;
         }
 
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public string Search { get; set; }
-        public ContestsSortType Sort { get; set; }
+        public string Sort { get; set; }
+
+        public bool IsValid()
+        {
+            if (PageNumber > 0 && PageSize > 0)
+                return true;
+            else
+                return false;
+        }
     }
 }

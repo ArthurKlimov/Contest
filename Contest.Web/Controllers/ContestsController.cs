@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Contest.BL.Dto;
-using Contest.BL.Dto.Contests;
 using Contest.BL.Exceptions;
 using Contest.BL.Extensions;
 using Contest.BL.Interfaces;
+using Contest.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,25 +19,6 @@ namespace Contest.Web.Controllers
         public ContestsController(IContestService contestService, IImageService imageService)
         {
             _contestService = contestService;
-            _imageService = imageService;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetViewWithContests(GetContestsDto dto)
-        {
-            try
-            {
-                var contests = await _contestService.GetContests(dto);
-                return PartialView("../Home/Index/_Contests", contests);
-            }
-            catch (BadRequestException)
-            {
-                return BadRequest();
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
         }
 
         [HttpGet]
@@ -49,34 +30,24 @@ namespace Contest.Web.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> AddContest([FromForm] AddContestDto dto, [FromForm] IFormFile coverImage)
+        public async Task<IActionResult> AddContest([FromForm] AddContest model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            byte[] coverBytes = null;
+            if (model.FormFile != null && model.FormFile.ContentType.StartsWith("image/"))
+                coverBytes = model.FormFile.OpenReadStream().GetBytes();
+
             try
             {
-                var contestId = await _contestService.AddContest(dto);
-
-                if (coverImage != null)
-                {
-                    var coverImageBytes = coverImage.OpenReadStream().GetBytes();
-                    var coverImageType = coverImage.ContentType;
-
-                    await _imageService.UploadContestCover(coverImageBytes, coverImageType, contestId);
-                }
+                await _contestService.AddContest(new ContestDto(model.EndDate, model.Title, model.Description, model.Link, coverBytes));
+                return Ok();
             }
-            catch (ContestValidationException)
+            catch (Exception)
             {
                 return BadRequest();
             }
-            catch (BadImageFormatException)
-            {
-                return BadRequest();
-            }
-            catch (ImageProcessingException)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-
-            return Ok();
         }
     }
 }

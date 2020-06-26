@@ -4,6 +4,6 @@
     {
         Popular,
         New,
-        AlmostClosed
+        Old
     }
 }

@@ -7,15 +7,12 @@
 @await Html.PartialAsync("Index/_Filter", Model)
 @await Html.PartialAsync("Index/_Contests", Model.Contests)
 
-@if (Model.Contests.HasNextPage)
-{
-    <div id="contests"></div>
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-4">
-                <button id="loadMoreButton" class="btn btn-primary w-100 rounded-0">Загрузить еще</button>
-            </div>
+<div id="contests"></div>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <button id="loadMoreButton" class="btn btn-primary w-100 rounded-0">Загрузить еще</button>
         </div>
     </div>
-}
+</div>
 <script src="~/js/home/index.js"></script>

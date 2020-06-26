@@ -6,8 +6,8 @@ namespace Contest.DA.Entities
     [Table("Contests")]
     public class ContestEntity : BaseEntity
     {
-        public string SmallDescription { get; set; }
-        public string FullDescription { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public string Link { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime PublishDate { get; set; }

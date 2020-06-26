@@ -1,17 +1,45 @@
-﻿using Contest.BL.Dto.Contests;
-using System;
+﻿using System;
 
 namespace Contest.BL.Dto
 {
-    public class ContestDto : AddContestDto
+    public class ContestDto
     {
+        public ContestDto()
+        {
+
+        }
+
+        public ContestDto(DateTime endDate, string title, string description, string link, byte[] cover)
+        {
+            Title = title;
+            EndDate = endDate;
+            Description = description;
+            Link = link;
+            Cover = cover;
+        }
+
         public int Id { get; set; }
+        public string Title { get; set; }
         public DateTime PublishDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Description { get; set; }
+        public string Link { get; set; }
+        public byte[] Cover { get; set; }
         public string PublishDateString { get; set; }
         public string EndDateString { get; set; }
         public string CoverPath { get; set; }
         public bool IsPublished { get; set; }
         public string Views { get; set; }
 
+        public bool IsValid()
+        {
+            if (!string.IsNullOrWhiteSpace(Title) && Title?.Length <= 50 &&
+                EndDate != null && (EndDate.Year == DateTime.UtcNow.Year || EndDate.Year == DateTime.UtcNow.Year + 1) &&
+                !string.IsNullOrWhiteSpace(Description) && Description?.Length <= 2000 &&
+                !string.IsNullOrWhiteSpace(Link) && Link?.Length <= 75)
+                return true;
+            else
+                return false;
+        }
     }
 }

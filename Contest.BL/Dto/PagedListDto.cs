@@ -5,7 +5,7 @@ namespace Contest.BL.Dto
 {
     public class PagedListDto<T>
     {
-        public PagedListDto(int pageNumber, int pageSize, int totalCount, List<T> items)
+        public PagedListDto(int pageNumber, int pageSize, int totalCount, List<T> items, string sort, string search)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
@@ -19,6 +19,8 @@ namespace Contest.BL.Dto
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
         public int TotalPages { get; set; }
+        public string Sort { get; set; }
+        public string Search { get; set; }
 
         public bool HasNextPage
         {
