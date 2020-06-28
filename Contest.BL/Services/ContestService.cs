@@ -54,12 +54,15 @@ namespace Contest.BL.Services
                            .Where(x => x.EndDate >= DateTime.UtcNow);
 
             if (!string.IsNullOrWhiteSpace(dto.Search))
-                query = query.Where(e => e.Description.Contains(dto.Search));
+                query = query.Where(e => e.Title.Contains(dto.Search));
+
+            if (!string.IsNullOrWhiteSpace(dto.City))
+                query = query.Where(x => x.City == dto.City);
 
             if (sort == ContestsSortType.Popular)
                 query = query.OrderByDescending(e => e.Views);
             else if (sort == ContestsSortType.Old)
-                query = query.OrderByDescending(e => e.EndDate);
+                query = query.OrderBy(e => e.PublishDate);
             else
                 query = query.OrderByDescending(e => e.PublishDate);
 

@@ -5,7 +5,6 @@ using Contest.BL.Exceptions;
 using Contest.BL.Extensions;
 using Contest.BL.Interfaces;
 using Contest.Web.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Contest.Web.Controllers
@@ -36,15 +35,28 @@ namespace Contest.Web.Controllers
                 return BadRequest();
 
             byte[] coverBytes = null;
-            if (model.FormFile != null && model.FormFile.ContentType.StartsWith("image/"))
-                coverBytes = model.FormFile.OpenReadStream().GetBytes();
+            if (model.CoverImage != null && model.CoverImage.ContentType.StartsWith("image/"))
+                coverBytes = model.CoverImage.OpenReadStream().GetBytes();
 
             try
             {
-                await _contestService.AddContest(new ContestDto(model.EndDate, model.Title, model.Description, model.Link, coverBytes));
+                await _contestService.AddContest(new ContestDto(model.EndDate, model.Title, model.Description, model.Link, model.City, coverBytes));
                 return Ok();
             }
             catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetContests([FromQuery] GetContestsDto dto)
+        {
+            try
+            {
+                return Json(await _contestService.GetContests(dto));
+            }
+            catch (BadRequestException)
             {
                 return BadRequest();
             }

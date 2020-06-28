@@ -17,11 +17,9 @@ namespace Contest.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] string sort, [FromQuery] string search)
+        public IActionResult Index()
         {
-            var contests = await _contestService.GetContests(new GetContestsDto(sort, search));
-            var vm = new HomeViewModel(contests.Items, contests.Sort, contests.Search);
-            return View(vm);
+            return View();
         }
     }
 }

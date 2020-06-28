@@ -2,45 +2,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container background-color-white pl-4 border" style="background-color: #FFF">
-    <form id="form" action="/addContest" method="post" enctype="multipart/form-data">
-        <div class="form-row pt-3">
+<div id="AddContestApp" class="container background-color-white pl-4 border" style="background-color: #FFF">
+    <form id="form" action="/contests/add" method="post" enctype="multipart/form-data">
+        <div class="form-row mt-3">
             <div class="col-6">
-                <h3 class="text-primary mb-1">Добавить конкурс</h3>
-                <small class="form-text text-muted">Все поля со * - обязательные.</small>
+                <input type="text" class="form-control border-secondary w-100" name="title">
+                <small class="form-text text-muted">* Название. 75 символов</small>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-3">
-                <input type="date" class="form-control" name="endDate" min="2020-01-01" max="2021-12-31" />
-                <small class="form-text text-muted">* Дата завершения конкурса</small>
+                <input type="date" class="form-control border-secondary" name="endDate" min="2020-01-01" max="2021-12-31" />
+                <small class="form-text text-muted">* Дата завершения</small>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-6">
-                <input type="text" class="form-control rounded-0 w-100" name="smallDescription">
-                <small class="form-text text-muted">* Краткое описание, будет на главной странице. Максимум 140 символов</small>
+                <input type="text" class="form-control border-secondary w-100" name="city" id="city">
+                <small class="form-text text-muted">* Населённый пункт</small>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-6">
-                <input type="text" class="form-control rounded-0 w-100" name="link">
-                <small class="form-text text-muted">* Ссылка на пост/видео/новость. Максимум 140 символов</small>
+                <input type="text" class="form-control w-100 border-secondary" name="link">
+                <small class="form-text text-muted">* Ссылка на пост/видео/новость. 75 символов</small>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-6">
                 <div class="custom-file">
-                    <input id="coverImage" type="file" class="custom-file-input" name="coverImage" accept="image/x-png,image/gif,image/jpeg">
-                    <label class="custom-file-label rounded-0" for="cover" data-browse="Выбрать"></label>
+                    <input id="coverImage" type="file" class="custom-file-input border-secondary" name="coverImage" accept="image/x-png,image/gif,image/jpeg">
+                    <label class="custom-file-label border-secondary" for="coverImage" data-browse="Выбрать"></label>
                     <small class="form-text text-muted">Обложка конкурса</small>
                 </div>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-12">
-                <small class="form-text text-muted">Полное описание условий, будет только на странице конкурса. Максимум 2500 символов</small>
-                <textarea id="fullDescription" name="fullDescription" maxlength="2500"></textarea>
+                <small class="form-text text-muted border-secondary">Полное описание условий. 2500 символов</small>
+                <textarea id="description" class="w-100" style="height: 300px;" name="description" maxlength="2500"></textarea>
             </div>
         </div>
         <div class="form-row mt-3 d-flex justify-content-center pb-3">
@@ -53,8 +53,48 @@
     @await Html.PartialAsync("AddContest/_SuccessModal")
     @await Html.PartialAsync("AddContest/_FailModal")
 </div>
+@*<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>*@
+<link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
+<script>
+    //$(document).ready(function () {
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
-<script src="~/js/home/add-contest.js"></script>
+    //    $('#description').summernote({
 
+    //        height: 300,
+    //        toolbar: [
+    //            ['style', ['bold', 'italic', 'underline', 'clear']],
+    //            ['para', ['ul', 'ol', 'paragraph']],
+    //        ]
+
+    //    });
+
+    //});
+
+    $('#coverImage').change(function () {
+        var fileName = $(this).val().replace('C:\\fakepath\\', " ")
+        $(this).next('.custom-file-label').html(fileName);
+    })
+
+    function formatSelected(suggestion) {
+        return suggestion.data.city;
+    }
+
+    $("#city").suggestions({
+
+        token: "8883f56da5a81a127cba6f4102dbcd72d9ba9078",
+        type: "ADDRESS",
+        hint: false,
+        bounds: "city",
+        constraints: {
+            locations: { city_type_full: "город" }
+        },
+        formatSelected: formatSelected
+
+    });
+
+    var AddContestApp = new Vue({
+        el: 'AddContestApp'
+    })
+</script>

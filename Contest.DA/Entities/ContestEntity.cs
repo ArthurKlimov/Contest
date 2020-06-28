@@ -14,5 +14,6 @@ namespace Contest.DA.Entities
         public int Views { get; set; }
         public string CoverPath { get; set; }
         public bool IsPublished { get; set; }
+        public string City { get; set; }
     }
 }

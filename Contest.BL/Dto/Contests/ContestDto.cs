@@ -9,13 +9,14 @@ namespace Contest.BL.Dto
 
         }
 
-        public ContestDto(DateTime endDate, string title, string description, string link, byte[] cover)
+        public ContestDto(DateTime endDate, string title, string description, string link, string city, byte[] cover)
         {
             Title = title;
             EndDate = endDate;
             Description = description;
             Link = link;
             Cover = cover;
+            City = city;
         }
 
         public int Id { get; set; }
@@ -30,13 +31,16 @@ namespace Contest.BL.Dto
         public string CoverPath { get; set; }
         public bool IsPublished { get; set; }
         public string Views { get; set; }
+        public string City { get; set; }
+
 
         public bool IsValid()
         {
             if (!string.IsNullOrWhiteSpace(Title) && Title?.Length <= 50 &&
                 EndDate != null && (EndDate.Year == DateTime.UtcNow.Year || EndDate.Year == DateTime.UtcNow.Year + 1) &&
                 !string.IsNullOrWhiteSpace(Description) && Description?.Length <= 2000 &&
-                !string.IsNullOrWhiteSpace(Link) && Link?.Length <= 75)
+                !string.IsNullOrWhiteSpace(Link) && Link?.Length <= 75 &&
+                !string.IsNullOrWhiteSpace(City) && City?.Length <= 50)
                 return true;
             else
                 return false;

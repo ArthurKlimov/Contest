@@ -1,18 +1,146 @@
-﻿@model Contest.Web.ViewModels.HomeViewModel
-
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@await Html.PartialAsync("Index/_Filter", Model)
-@await Html.PartialAsync("Index/_Contests", Model.Contests)
-
-<div id="contests"></div>
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-4">
-            <button id="loadMoreButton" class="btn btn-primary w-100 rounded-0">Загрузить еще</button>
+<div id="IndexApp">
+    <div class="container border p-3" style="background-color: #fff;">
+        <div class="row pl-4">
+            <h1>25000 онлайн-конкурсов по всей России</h1>
+        </div>
+        <div class="row mt-3">
+            <div class="pl-4" style="width: 35em;">
+                <input type="text" class="form-control border-secondary"
+                        placeholder="Поиск по конкурсам и розыгрышам"
+                        name="search" v-model="search" style="outline: none;">
+            </div>
+            <button type="button" class="btn button-size border  border-secondary dropdown-toggle ml-4"
+                    style="width: 20em; text-align: left;"
+                    data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                Город
+            </button>
+            <div class="dropdown-menu">
+            </div>
+            <button v-on:click="filterContests" type="submit" class="btn btn-primary ml-4"
+                    style="width: 10em">
+                Найти
+            </button>
+        </div>
+        <div class="row pl-4 mt-4">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a v-on:click="sortContests('Popular')" v-bind:class="{ active: sort == 'Popular' }" class="nav-link" href="#">Популярные</a>
+                </li>
+                <li class="nav-item">
+                    <a v-on:click="sortContests('New')" v-bind:class="{ active: sort == 'New' }" class="nav-link" href="#">Новые</a>
+                </li>
+                <li class="nav-item">
+                    <a v-on:click="sortContests('Old')" v-bind:class="{ active: sort == 'Old' }" class="nav-link" href="#">Старые</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div v-if="hasContests" v-for="contest in contests" v-bind:key="contest.id" class="col-4 mt-4">
+                <div class="card" style="height: 27em;">
+                    <img :src="contest.coverPath" class="card-img-top h-50 w-100" style="object-fit: cover">
+                    <div class="card-body h-50">
+                        <div class="card-title d-flex justify-content-between">
+                            <div>
+                                <p class="mb-0"><i class="far fa-clock"></i> {{ contest.endDateString }}</p>
+                                <p class="mb-0"> {{ contest.publishDateString }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="mb-0"><i class="far fa-eye"></i>  {{ contest.views }}</p>
+                                <p class="mb-0 text-primary">Петрозаводск</p>
+                            </div>
+                        </div>
+                        <p class="card-text">{{ contest.title }}</p>
+                        <a href="#" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="hasContests && hasNextPage" class="row justify-content-center mt-4">
+            <div class="col-4">
+                <button v-on:click="getContests" class="btn btn-primary w-100">Показать еще</button>
+            </div>
         </div>
     </div>
 </div>
-<script src="~/js/home/index.js"></script>
+<script>
+    var IndexApp = new Vue({
+        el: '#IndexApp',
+        data: {
+            hasContests: false,
+            hasNextPage: true,
+            pageNumber: 1,
+            pageSize: 15,
+            search: "",
+            sort: "Popular",
+            contests: []
+        },
+        created: function () {
+            this.getContests();
+        },
+        methods: {
+
+            getContests() {
+                
+                var request = $.ajax({
+                    url: "/contests",
+                    method: "GET",
+                    data: {
+                        pageNumber: this.pageNumber,
+                        pageSize: this.pageSize,
+                        search: this.search,
+                        sort: this.sort
+                    },
+                    dataType: "json",
+                    contentType: "application/json"
+                });
+
+                var self = this;
+
+                request.done(function (response) {
+
+                    if (self.contests.length === 0)
+                        self.contests = response.items;
+                    else
+                        self.contests = self.contests.concat(response.items);
+
+                    self.hasNextPage = response.hasNextPage;
+
+                    if (response.hasNextPage)
+                        self.pageNumber++
+
+                    if (response.items.length !== 0)
+                        self.hasContests = true;
+
+                });
+
+            },
+
+            filterContests() {
+
+                this.contests.length = 0;
+                this.pageNumber = 1;
+                this.hasContests = false;
+                this.getContests();
+
+            },
+
+            sortContests(sort) {
+
+                this.contests.length = 0;
+                this.pageNumber = 1;
+                this.hasContests = false;
+                this.sort = sort;
+                this.getContests();
+
+            }
+
+        }
+    })
+</script>
+
