@@ -3,35 +3,54 @@
 }
 
 <div id="AddContestApp" class="container background-color-white pl-4 border" style="background-color: #FFF">
-    <form id="form" action="/contests/add" method="post" enctype="multipart/form-data">
+    <form v-on:submit="validateForm" id="form" action="/contests/add" method="post" enctype="multipart/form-data">
         <div class="form-row mt-3">
             <div class="col-6">
-                <input type="text" class="form-control border-secondary w-100" name="title">
-                <small class="form-text text-muted">* Название. 75 символов</small>
+                <input type="text" v-bind:class="" 
+                       class="form-control border-secondary w-100" name="title" v-model="title"
+                >
+                <small v-bind:class="" class="form-text">* Название. 75 символов
+                </small>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-3">
-                <input type="date" class="form-control border-secondary" name="endDate" min="2020-01-01" max="2021-12-31" />
-                <small class="form-text text-muted">* Дата завершения</small>
+                <input type="date" v-bind:class=""
+                       class="form-control border-secondary" 
+                       name="endDate" min="2020-01-01" max="2021-12-31" v-model="endDate"
+                />
+                <small v-bind:class="" 
+                       class="form-text">* Дата завершения
+                </small>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-6">
-                <input type="text" class="form-control border-secondary w-100" name="city" id="city">
-                <small class="form-text text-muted">* Населённый пункт</small>
+                <input type="text" class="form-control border-secondary w-100" 
+                       name="city" id="city" v-model="city"
+                       v-bind:class="" 
+                >
+                <small v-bind:class="" 
+                       class="form-text">* Населённый пункт
+                </small>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-6">
-                <input type="text" class="form-control w-100 border-secondary" name="link">
-                <small class="form-text text-muted">* Ссылка на пост/видео/новость. 75 символов</small>
+                <input type="text" class="form-control w-100 border-secondary" 
+                       name="link" v-model="link"
+                       v-bind:class=""
+                 >
+                <small class="form-text" 
+                       v-bind:class="">* Ссылка на пост/видео/новость. 75 символов
+                </small>
             </div>
         </div>
         <div class="form-row mt-3">
             <div class="col-6">
                 <div class="custom-file">
-                    <input id="coverImage" type="file" class="custom-file-input border-secondary" name="coverImage" accept="image/x-png,image/gif,image/jpeg">
+                    <input id="coverImage" type="file" class="custom-file-input border-secondary" 
+                           name="coverImage" accept="image/x-png,image/gif,image/jpeg">
                     <label class="custom-file-label border-secondary" for="coverImage" data-browse="Выбрать"></label>
                     <small class="form-text text-muted">Обложка конкурса</small>
                 </div>
@@ -39,8 +58,11 @@
         </div>
         <div class="form-row mt-3">
             <div class="col-12">
-                <small class="form-text text-muted border-secondary">Полное описание условий. 2500 символов</small>
-                <textarea id="description" class="w-100" style="height: 300px;" name="description" maxlength="2500"></textarea>
+                <small v-bind:class="" class="form-text text-muted border-secondary">Полное описание условий. 2500 символов</small>
+                <textarea id="description" class="w-100" style="height: 20em;" 
+                          name="description" maxlength="2500" v-model="description"
+                          v-bind:class="">
+                </textarea>
             </div>
         </div>
         <div class="form-row mt-3 d-flex justify-content-center pb-3">
@@ -53,24 +75,42 @@
     @await Html.PartialAsync("AddContest/_SuccessModal")
     @await Html.PartialAsync("AddContest/_FailModal")
 </div>
-@*<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>*@
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
 <script>
-    //$(document).ready(function () {
 
-    //    $('#description').summernote({
+    var AddContestApp = new Vue({
+        el: '#AddContestApp',
+        data: {
+            title: "",
+            endDate: "",
+            city: "",
+            link: "",
+            description: "",
+            isTitleValid: false,
+            isEndDateValid: false,
+            isCityValid: false,
+            isLinkValid: false,
+            isDescriptionValid: false,
+            HasSubmitted: false,
+        },
+        methods: {
 
-    //        height: 300,
-    //        toolbar: [
-    //            ['style', ['bold', 'italic', 'underline', 'clear']],
-    //            ['para', ['ul', 'ol', 'paragraph']],
-    //        ]
+            validateForm(event) {
 
-    //    });
+                event.preventDefault();
+                this.HasSubmitted = true;
 
-    //});
+                this.isTitleValid = (this.title !== "" && this.title.length <= 75) ? true : false;
+                this.isEndDateValid = (this.endDate !== "") ? true : false;
+                this.isCityValid = (this.city !== "") ? true : false;
+                this.isLinkValid = (this.link.length !== "" && this.link.length <= 75) ? true : false;
+                this.isDescriptionValid = (this.description.length <= 1500) ? true : false;
+
+            }
+
+        }
+    });
 
     $('#coverImage').change(function () {
         var fileName = $(this).val().replace('C:\\fakepath\\', " ")
@@ -94,7 +134,4 @@
 
     });
 
-    var AddContestApp = new Vue({
-        el: 'AddContestApp'
-    })
 </script>

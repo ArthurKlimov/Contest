@@ -1,0 +1,30 @@
+﻿@model Contest.BL.Dto.ContestDto
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container border" style="background-color: #FFF">
+    <div class="row">
+        <div class="col-6">
+            <h1 class="pb-4">@Model.Title</h1>
+            <img src="@Model.CoverPath" alt="@Model.Title" class="w-100 pb-4" style="height: 20em; object-fit: cover;" />
+        </div>
+        <div class="col-3" style="margin-top: 5em;">
+            <p class="text-danger"><i class="far fa-clock"></i> Заканчивается: @Model.EndDateString</p>
+            <div class="d-flex justify-content-between">
+                <p class="text-secondary"><span class="text-primary">@Model.City</span>, @Model.PublishDateString </p>
+            </div>
+            <p class="text-secondary"><i class="far fa-eye"></i> Просмотров: @Model.Views</p>
+            <a href="@Model.Link" class="btn btn-primary w-100 mt-4">Перейти на страницу конкурса</a>
+        </div>
+        <div class="col-3">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-9">
+            <p>@Model.Description</p>
+        </div>
+    </div>
+</div>

@@ -7,5 +7,6 @@ namespace Contest.BL.Interfaces
     {
         Task AddContest(ContestDto dto);
         Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto);
+        Task<ContestDto> GetContest(int id);
     }
 }

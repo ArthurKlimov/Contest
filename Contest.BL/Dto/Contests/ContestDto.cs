@@ -30,15 +30,15 @@ namespace Contest.BL.Dto
         public string EndDateString { get; set; }
         public string CoverPath { get; set; }
         public bool IsPublished { get; set; }
-        public string Views { get; set; }
+        public int Views { get; set; }
         public string City { get; set; }
 
 
         public bool IsValid()
         {
-            if (!string.IsNullOrWhiteSpace(Title) && Title?.Length <= 50 &&
+            if (!string.IsNullOrWhiteSpace(Title) && Title?.Length <= 75 &&
                 EndDate != null && (EndDate.Year == DateTime.UtcNow.Year || EndDate.Year == DateTime.UtcNow.Year + 1) &&
-                !string.IsNullOrWhiteSpace(Description) && Description?.Length <= 2000 &&
+                Description?.Length <= 1500 &&
                 !string.IsNullOrWhiteSpace(Link) && Link?.Length <= 75 &&
                 !string.IsNullOrWhiteSpace(City) && City?.Length <= 50)
                 return true;

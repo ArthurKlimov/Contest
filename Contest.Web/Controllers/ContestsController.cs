@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Contest.BL.Dto;
+using Contest.BL.Dto.Contests;
 using Contest.BL.Exceptions;
 using Contest.BL.Extensions;
 using Contest.BL.Interfaces;
@@ -59,6 +60,21 @@ namespace Contest.Web.Controllers
             catch (BadRequestException)
             {
                 return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("contest/{id}")]
+        public async Task<IActionResult> GetContest([FromRoute] int id)
+        {
+            try
+            {
+                var contest = await _contestService.GetContest(id);
+                return View(contest);
+            }
+            catch
+            {
+                return NotFound();
             }
         }
     }

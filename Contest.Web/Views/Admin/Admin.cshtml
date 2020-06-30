@@ -1,0 +1,48 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="AdminApp">
+    <div class="container">
+        <div class="row">
+            <div class="col-3 border rounded" style="background-color: #FFF; height: 20em">
+                <a href="/iamadministrator" class="mt-2" style="display: block; text-decoration: none;">Список конкурсов и розыгрышей</a>
+                <hr class="mt-1 mb-1" />
+                <a href="#" class="mt-2" style="display: block; text-decoration: none;">Выйти</a>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-8 border rounded pt-2" style="background-color: #FFF;">
+                <a href="#" style="text-decoration: none;">Скрытые</a>
+                <a href="#" class="pl-2" style="text-decoration: none;">Активные</a>
+                <a href="#" class="pl-2" style="text-decoration: none;">Закончились</a>
+                <hr class="mt-1" />
+                <div class="card">
+                    <div class="row no-gutters">
+                        <div class="col-md-5 pl-2">
+                            <img src="..." class="card-img" alt="..." style="display: block;">
+                            <a class="btn btn-outline-primary" href="#">Опубликовать</a>
+                            <a class="btn btn-outline-danger" href="#">Удалить</a>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body">
+                                <p class="card-text"><span class="text-primary">Москва</span>, закончится 23.07</p>
+                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer123453312211</p>
+                                <p class="card-text"><small class="text-muted">Добавлен 2 часа назад</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var AdminApp = new Vue({
+        el: "#AdminApp",
+        data: {
+            hasContests: false,
+
+        }
+    });
+</script>

@@ -12,6 +12,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Contest.BL.Enums;
+using System.Security.Cryptography;
+using Contest.BL.Dto.Contests;
 
 namespace Contest.BL.Services
 {
@@ -42,7 +44,6 @@ namespace Contest.BL.Services
             await _imageService.UploadContestCover(dto.Cover, entity.Id);
         }
 
-
         public async Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto)
         {
             Enum.TryParse(dto.Sort, out ContestsSortType sort);
@@ -57,7 +58,7 @@ namespace Contest.BL.Services
                 query = query.Where(e => e.Title.Contains(dto.Search));
 
             if (!string.IsNullOrWhiteSpace(dto.City))
-                query = query.Where(x => x.City == dto.City);
+                query = query.Where(x => x.City.Contains(dto.City));
 
             if (sort == ContestsSortType.Popular)
                 query = query.OrderByDescending(e => e.Views);
@@ -76,10 +77,26 @@ namespace Contest.BL.Services
             {
                 contest.EndDateString = contest.EndDate.ParseToDateAndMonth();
                 contest.PublishDateString = contest.PublishDate.ParseToTimeDifference();
+                contest.Description = "";
             }
 
             return new PagedListDto<ContestDto>(dto.PageNumber, dto.PageSize, totalCount, contests, dto.Sort, dto.Search);
         }
 
+        public async Task<ContestDto> GetContest(int id)
+        {
+            var entity = await _db.Contests.FirstOrDefaultAsync(x => x.Id == id);
+            if (entity == null)
+                throw new NotFoundException();
+
+            entity.Views++;
+            await _db.SaveChangesAsync();
+
+            var contest = _mapper.Map<ContestEntity, ContestDto>(entity);
+            contest.EndDateString = contest.EndDate.ParseToDateAndMonth();
+            contest.PublishDateString = contest.PublishDate.ParseToTimeDifference();
+
+            return contest;
+        }
     }
 }

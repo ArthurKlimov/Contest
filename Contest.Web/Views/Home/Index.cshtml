@@ -9,17 +9,13 @@
         <div class="row mt-3">
             <div class="pl-4" style="width: 35em;">
                 <input type="text" class="form-control border-secondary"
-                        placeholder="Поиск по конкурсам и розыгрышам"
-                        name="search" v-model="search" style="outline: none;">
+                       placeholder="Поиск по конкурсам и розыгрышам"
+                       name="search" v-model="search" style="outline: none;">
             </div>
-            <button type="button" class="btn button-size border  border-secondary dropdown-toggle ml-4"
-                    style="width: 20em; text-align: left;"
-                    data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                Город
-            </button>
-            <div class="dropdown-menu">
-            </div>
+            <input type="text" class="form-control border-secondary ml-4"
+                    name="city" id="city" style="width: 20em;" placeholder="Поиск по городу"
+                   v-model="city">
+
             <button v-on:click="filterContests" type="submit" class="btn btn-primary ml-4"
                     style="width: 10em">
                 Найти
@@ -44,19 +40,21 @@
             <div v-if="hasContests" v-for="contest in contests" v-bind:key="contest.id" class="col-4 mt-4">
                 <div class="card" style="height: 27em;">
                     <img :src="contest.coverPath" class="card-img-top h-50 w-100" style="object-fit: cover">
-                    <div class="card-body h-50">
+                    <div class="d-flex flex-column card-body h-50">
                         <div class="card-title d-flex justify-content-between">
                             <div>
-                                <p class="mb-0"><i class="far fa-clock"></i> {{ contest.endDateString }}</p>
-                                <p class="mb-0"> {{ contest.publishDateString }}</p>
+                                <p class="mb-0 text-secondary"><i class="far fa-clock"></i> {{ contest.endDateString }}</p>
+                                <p class="mb-0 text-secondary"> {{ contest.publishDateString }}</p>
                             </div>
                             <div class="text-right">
-                                <p class="mb-0"><i class="far fa-eye"></i>  {{ contest.views }}</p>
-                                <p class="mb-0 text-primary">Петрозаводск</p>
+                                <p class="mb-0 text-secondary"><i class="far fa-eye"></i>  {{ contest.views }}</p>
+                                <p class="mb-0 text-primary"> {{ contest.city }}</p>
                             </div>
                         </div>
                         <p class="card-text">{{ contest.title }}</p>
-                        <a href="#" class="btn btn-outline-primary">Подробнее</a>
+                        <div class="d-flex justify-content-center mt-auto">
+                            <a :href="'contest/'+contest.id" class="btn btn-outline-primary w-50">Подробнее</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -78,6 +76,7 @@
             pageSize: 15,
             search: "",
             sort: "Popular",
+            city: "",
             contests: []
         },
         created: function () {
@@ -86,7 +85,7 @@
         methods: {
 
             getContests() {
-                
+
                 var request = $.ajax({
                     url: "/contests",
                     method: "GET",
@@ -94,7 +93,8 @@
                         pageNumber: this.pageNumber,
                         pageSize: this.pageSize,
                         search: this.search,
-                        sort: this.sort
+                        sort: this.sort,
+                        city: this.city
                     },
                     dataType: "json",
                     contentType: "application/json"
@@ -142,5 +142,6 @@
 
         }
     })
+
 </script>
 
