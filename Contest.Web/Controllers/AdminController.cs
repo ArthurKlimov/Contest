@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Contest.Web.Controllers
 {
-    [Route("iamadministrator")]
+    [Route("iamadmin")]
     public class AdminController : Controller
     {
         public IActionResult Admin()

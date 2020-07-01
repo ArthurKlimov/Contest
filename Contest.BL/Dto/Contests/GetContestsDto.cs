@@ -7,6 +7,7 @@
         public string Search { get; set; }
         public string Sort { get; set; }
         public string City { get; set; }
+        public bool IsPublished { get; set; }
 
         public bool IsValid()
         {

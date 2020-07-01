@@ -1,79 +1,54 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div id="AddContestApp" class="container background-color-white pl-4 border" style="background-color: #FFF">
-    <form v-on:submit="validateForm" id="form" action="/contests/add" method="post" enctype="multipart/form-data">
-        <div class="form-row mt-3">
-            <div class="col-6">
-                <input type="text" v-bind:class="" 
-                       class="form-control border-secondary w-100" name="title" v-model="title"
-                >
-                <small v-bind:class="" class="form-text">* Название. 75 символов
-                </small>
-            </div>
-        </div>
-        <div class="form-row mt-3">
-            <div class="col-3">
-                <input type="date" v-bind:class=""
-                       class="form-control border-secondary" 
-                       name="endDate" min="2020-01-01" max="2021-12-31" v-model="endDate"
-                />
-                <small v-bind:class="" 
-                       class="form-text">* Дата завершения
-                </small>
-            </div>
-        </div>
-        <div class="form-row mt-3">
-            <div class="col-6">
-                <input type="text" class="form-control border-secondary w-100" 
-                       name="city" id="city" v-model="city"
-                       v-bind:class="" 
-                >
-                <small v-bind:class="" 
-                       class="form-text">* Населённый пункт
-                </small>
-            </div>
-        </div>
-        <div class="form-row mt-3">
-            <div class="col-6">
-                <input type="text" class="form-control w-100 border-secondary" 
-                       name="link" v-model="link"
-                       v-bind:class=""
-                 >
-                <small class="form-text" 
-                       v-bind:class="">* Ссылка на пост/видео/новость. 75 символов
-                </small>
-            </div>
-        </div>
-        <div class="form-row mt-3">
-            <div class="col-6">
-                <div class="custom-file">
-                    <input id="coverImage" type="file" class="custom-file-input border-secondary" 
-                           name="coverImage" accept="image/x-png,image/gif,image/jpeg">
-                    <label class="custom-file-label border-secondary" for="coverImage" data-browse="Выбрать"></label>
-                    <small class="form-text text-muted">Обложка конкурса</small>
+<div id="AddContestApp" class="container">
+    <form v-on:submit="validateForm" enctype="multipart/form-data">
+        <div class="row mt-3">
+            <div class="col-6 border rounded p-4" style="background-color: #FFF">
+                <input type="text" class="form-control" v-model="contest.title"
+                       v-bind:class="{ 'is-invalid': !isTitleValid && hasSubmitted }">
+                <small class="text-muted">* Название</small>
+                <div class="row mt-2">
+                    <div class="col-5">
+                        <input type="date" class="form-control" min="2020-01-01" max="2021-12-31"
+                               v-model="contest.endDate"
+                               v-bind:class="{ 'is-invalid': !isEndDateValid && hasSubmitted }" />
+                        <small class="text-muted">* Дата завершения</small>
+                    </div>
+                    <div class="col-7">
+                        <input type="text" class="form-control"
+                               v-model="contest.link"
+                               v-bind:class="{ 'is-invalid': !isLinkValid && hasSubmitted }">
+                        <small class="text-muted">* Ссылка</small>
+                    </div>
+                </div>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="acrossCountry" style="margin-top: 0.5em;"
+                           v-model="contest.acrossCountry">
+                    <label class="form-check-label" for="defaultCheck1">
+                        по всей России
+                    </label>
+                </div>
+                <input type="text" class="form-control mt-2" id="city"
+                       v-model="contest.city"
+                       v-bind:class="{ 'is-invalid': !isCityValid && hasSubmitted }">
+                <small class="text-muted">Населённый пункт</small>
+                <div class="custom-file mt-2">
+                    <input id="coverImage" type="file" ref="file" class="custom-file-input"
+                           accept="image/x-png,image/gif,image/jpeg" v-on:change="handleFileUpload" />
+                    <label class="custom-file-label" for="coverImage" data-browse="Выбрать"></label>
+                    <small class="text-muted">Обложка конкурса</small>
+                </div>
+                <div class="d-flex justify-content-center mt-2">
+                    <input type="submit" class="btn btn-outline-primary w-25" value="Добавить">
                 </div>
             </div>
-        </div>
-        <div class="form-row mt-3">
-            <div class="col-12">
-                <small v-bind:class="" class="form-text text-muted border-secondary">Полное описание условий. 2500 символов</small>
-                <textarea id="description" class="w-100" style="height: 20em;" 
-                          name="description" maxlength="2500" v-model="description"
-                          v-bind:class="">
-                </textarea>
-            </div>
-        </div>
-        <div class="form-row mt-3 d-flex justify-content-center pb-3">
-            <div class="col-3">
-                <input type="submit" class="btn btn-primary w-100" value="Добавить">
+            <div class="col-6">
+                <h4>Спасибо, что пользуетесь наш сервисом!</h4>
+                <p>Много текста текста текста текста</p>
             </div>
         </div>
     </form>
-
-    @await Html.PartialAsync("AddContest/_SuccessModal")
-    @await Html.PartialAsync("AddContest/_FailModal")
 </div>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
@@ -82,40 +57,65 @@
     var AddContestApp = new Vue({
         el: '#AddContestApp',
         data: {
-            title: "",
-            endDate: "",
-            city: "",
-            link: "",
-            description: "",
+            contest: {
+                title: "",
+                endDate: "",
+                city: "",
+                link: "",
+                coverImage: "",
+                acrossCountry: true
+            },
             isTitleValid: false,
             isEndDateValid: false,
             isCityValid: false,
             isLinkValid: false,
-            isDescriptionValid: false,
-            HasSubmitted: false,
+            hasSubmitted: false,
         },
         methods: {
+            handleFileUpload() {
+                this.contest.coverImage = this.$refs.file.files[0];
+            },
 
             validateForm(event) {
-
                 event.preventDefault();
-                this.HasSubmitted = true;
+                this.hasSubmitted = true;
+                this.isTitleValid = (this.contest.title.length && this.contest.title.length <= 140) ? true : false;
+                this.isEndDateValid = (this.contest.endDate.length) ? true : false;
+                this.isCityValid = (this.contest.city.length <= 75) ? true : false;
+                this.isLinkValid = (this.contest.link.length && this.contest.link.length <= 75) ? true : false;
 
-                this.isTitleValid = (this.title !== "" && this.title.length <= 75) ? true : false;
-                this.isEndDateValid = (this.endDate !== "") ? true : false;
-                this.isCityValid = (this.city !== "") ? true : false;
-                this.isLinkValid = (this.link.length !== "" && this.link.length <= 75) ? true : false;
-                this.isDescriptionValid = (this.description.length <= 1500) ? true : false;
+                if (this.isTitleValid && this.isEndDateValid && this.isCityValid && this.isLinkValid) {
+                    var formData = new FormData();
+                    formData.append('title', this.contest.title);
+                    formData.append('endDate', this.contest.endDate);
+                    formData.append('city', this.contest.city);
+                    formData.append('link', this.contest.link);
+                    formData.append('acrossCountry', this.contest.acrossCountry);
+                    formData.append('coverImage', this.contest.coverImage);
 
+                    var request = $.ajax({
+                        url: "/contests/add",
+                        method: "POST",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    });
+
+                    request.done();
+                    request.fail();
+                }
             }
-
         }
     });
 
-    $('#coverImage').change(function () {
-        var fileName = $(this).val().replace('C:\\fakepath\\', " ")
-        $(this).next('.custom-file-label').html(fileName);
-    })
+    var defaultFormatResult = $.Suggestions.prototype.formatResult;
+
+    function formatResult(value, currentValue, suggestion, options) {
+        var newValue = suggestion.data.city;
+        suggestion.value = newValue;
+        return defaultFormatResult.call(this, newValue, currentValue, suggestion, options);
+    }
 
     function formatSelected(suggestion) {
         return suggestion.data.city;
@@ -130,8 +130,15 @@
         constraints: {
             locations: { city_type_full: "город" }
         },
-        formatSelected: formatSelected
-
+        formatResult: formatResult,
+        formatSelected: formatSelected,
+        onSelectNothing: function () {
+            $(this).val("");
+        }
     });
 
+    $('#coverImage').change(function () {
+        var fileName = $(this).val().replace('C:\\fakepath\\', " ");
+        $(this).next('.custom-file-label').html(fileName);
+    })
 </script>

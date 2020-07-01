@@ -39,9 +39,6 @@ namespace Contest.BL.Services
 
         private async Task<string> UploadImage(byte[] imageBytes, string path)
         {
-            if (imageBytes.Length > 5242880)
-                throw new BadRequestException();
-
             string filePath = await Task.Run(() =>
             {
                 try

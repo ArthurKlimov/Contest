@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Contest.BL.Dto;
-using Contest.BL.Dto.Contests;
 using Contest.BL.Exceptions;
 using Contest.BL.Extensions;
 using Contest.BL.Interfaces;
@@ -14,9 +13,8 @@ namespace Contest.Web.Controllers
     public class ContestsController : Controller
     {
         private readonly IContestService _contestService;
-        private readonly IImageService _imageService;
 
-        public ContestsController(IContestService contestService, IImageService imageService)
+        public ContestsController(IContestService contestService)
         {
             _contestService = contestService;
         }
@@ -30,18 +28,27 @@ namespace Contest.Web.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> AddContest([FromForm] AddContest model)
+        public async Task<IActionResult> AddContest(AddContest model)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || (!model.AcrossCountry && string.IsNullOrWhiteSpace(model.City)))
                 return BadRequest();
 
             byte[] coverBytes = null;
-            if (model.CoverImage != null && model.CoverImage.ContentType.StartsWith("image/"))
+
+            if (model.CoverImage != null)
+            {
+                if (!model.CoverImage.ContentType.StartsWith("image/"))
+                    return BadRequest();
+
                 coverBytes = model.CoverImage.OpenReadStream().GetBytes();
+                if (coverBytes.Length > 5242880)
+                    return BadRequest();
+            }
 
             try
             {
-                await _contestService.AddContest(new ContestDto(model.EndDate, model.Title, model.Description, model.Link, model.City, coverBytes));
+                await _contestService.AddContest(new ContestDto(model.EndDate, model.Title, model.Link, 
+                    model.City, model.AcrossCountry, coverBytes));
                 return Ok();
             }
             catch (Exception)
@@ -72,7 +79,52 @@ namespace Contest.Web.Controllers
                 var contest = await _contestService.GetContest(id);
                 return View(contest);
             }
-            catch
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/publish")]
+        public async Task<IActionResult> PublishContest([FromRoute] int id)
+        {
+            try
+            {
+                await _contestService.PublishContest(id);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [Route("contest/{id}/hide")]
+        public async Task<IActionResult> HideContest([FromRoute] int id)
+        {
+            try
+            {
+                await _contestService.HideContest(id);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete]
+        [Route("contest/{id}")]
+        public async Task<IActionResult> DeleteContest([FromRoute] int id)
+        {
+            try
+            {
+                await _contestService.DeleteContest(id);
+                return Ok();
+            }
+            catch (NotFoundException)
             {
                 return NotFound();
             }

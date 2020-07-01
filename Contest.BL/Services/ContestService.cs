@@ -13,7 +13,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contest.BL.Enums;
 using System.Security.Cryptography;
-using Contest.BL.Dto.Contests;
 
 namespace Contest.BL.Services
 {
@@ -32,11 +31,8 @@ namespace Contest.BL.Services
 
         public async Task AddContest(ContestDto dto)
         {
-            if (!dto.IsValid())
-                throw new BadRequestException();
-
             var entity = _mapper.Map<ContestDto, ContestEntity>(dto);
-            entity.PublishDate = DateTime.UtcNow;
+            entity.IsPublished = false;
 
             _db.Contests.Add(entity);
             await _db.SaveChangesAsync();
@@ -52,7 +48,7 @@ namespace Contest.BL.Services
                 throw new BadRequestException();
 
             var query = _db.Contests
-                           .Where(x => x.EndDate >= DateTime.UtcNow);
+                           .Where(x => x.EndDate >= DateTime.UtcNow && x.IsPublished == dto.IsPublished);
 
             if (!string.IsNullOrWhiteSpace(dto.Search))
                 query = query.Where(e => e.Title.Contains(dto.Search));
@@ -76,8 +72,7 @@ namespace Contest.BL.Services
             foreach (var contest in contests)
             {
                 contest.EndDateString = contest.EndDate.ParseToDateAndMonth();
-                contest.PublishDateString = contest.PublishDate.ParseToTimeDifference();
-                contest.Description = "";
+                contest.PublishDateString = contest.PublishDate?.ParseToTimeDifference();
             }
 
             return new PagedListDto<ContestDto>(dto.PageNumber, dto.PageSize, totalCount, contests, dto.Sort, dto.Search);
@@ -94,9 +89,43 @@ namespace Contest.BL.Services
 
             var contest = _mapper.Map<ContestEntity, ContestDto>(entity);
             contest.EndDateString = contest.EndDate.ParseToDateAndMonth();
-            contest.PublishDateString = contest.PublishDate.ParseToTimeDifference();
+            contest.PublishDateString = contest.PublishDate?.ParseToTimeDifference();
 
             return contest;
+        }
+
+        public async Task PublishContest(int id)
+        {
+            var entity = await _db.Contests.FirstOrDefaultAsync(x => x.Id == id);
+            if (entity == null)
+                throw new NotFoundException();
+
+            entity.IsPublished = true;
+            entity.PublishDate = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task HideContest(int id)
+        {
+            var entity = await _db.Contests.FirstOrDefaultAsync(x => x.Id == id);
+            if (entity == null)
+                throw new NotFoundException();
+
+            entity.IsPublished = false;
+            entity.PublishDate = null;
+
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteContest(int id)
+        {
+            var entity = await _db.Contests.FirstOrDefaultAsync(x => x.Id == id);
+            if (entity == null)
+                throw new NotFoundException();
+
+            _db.Contests.Remove(entity);
+            await _db.SaveChangesAsync();
         }
     }
 }

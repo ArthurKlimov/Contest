@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,37 +11,110 @@
                 <a href="#" class="mt-2" style="display: block; text-decoration: none;">Выйти</a>
             </div>
             <div class="col-1"></div>
-            <div class="col-8 border rounded pt-2" style="background-color: #FFF;">
-                <a href="#" style="text-decoration: none;">Скрытые</a>
-                <a href="#" class="pl-2" style="text-decoration: none;">Активные</a>
-                <a href="#" class="pl-2" style="text-decoration: none;">Закончились</a>
-                <hr class="mt-1" />
-                <div class="card">
+            <div class="col-8 border rounded pt-2 pb-2" style="background-color: #FFF;">
+                <a href="#" v-on:click="filterContests(false)" v-bind:class="{ 'btn': !isPublished, 'btn-primary': !isPublished }" style="text-decoration: none;">Скрытые</a>
+                <a href="#" v-on:click="filterContests(true)" v-bind:class="{ 'btn': isPublished, 'btn-primary': isPublished }" class="pl-2" style="text-decoration: none;">Активные</a>
+                <hr />
+                <div v-if="hasContests" v-for="contest in contests" v-bind:key="contest.id" class="card">
                     <div class="row no-gutters">
-                        <div class="col-md-5 pl-2">
-                            <img src="..." class="card-img" alt="..." style="display: block;">
-                            <a class="btn btn-outline-primary" href="#">Опубликовать</a>
-                            <a class="btn btn-outline-danger" href="#">Удалить</a>
+                        <div class="col-md-5 pl-2 pt-2">
+                            <img :src="contest.coverPath" class="card-img" alt="..." style="display: block;">
+                            <button v-on:click="publishContest(contest.id)" type="button" class="btn btn-outline-primary">Опубликовать</button>
+                            <a class="btn btn-outline-danger mt-2 mb-2" href="#">Удалить</a>
                         </div>
                         <div class="col-md-7">
                             <div class="card-body">
-                                <p class="card-text"><span class="text-primary">Москва</span>, закончится 23.07</p>
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer123453312211</p>
-                                <p class="card-text"><small class="text-muted">Добавлен 2 часа назад</small></p>
+                                <p class="card-text"><span class="text-primary">{{ contest.city }}</span>, закончится {{ contest.endDateString }}</p>
+                                <p class="card-text">{{ contest.title }}</p>
+                                <p class="card-text"><small class="text-muted">{{ contest.publishDateString }}</small></p>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div v-if="hasContests && hasNextPage" class="d-flex justify-content-center mt-4">
+                    <button v-on:click="getContests" class="btn btn-primary">Показать еще</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script>
+
     var AdminApp = new Vue({
         el: "#AdminApp",
         data: {
             hasContests: false,
+            hasNextPage: true,
+            isPublished: false,
+            search: "",
+            contests: []
+        },
+        created: function () {
+            this.getContests();
+        },
+        methods: {
+            getContests() {
+                var request = $.ajax({
+                    url: "/contests",
+                    method: "GET",
+                    data: {
+                        pageNumber: 1,
+                        pageSize: 15,
+                        isPublished: this.isPublished,
+                        search: this.search,
+                        sort: this.sort,
+                        city: this.city
+                    },
+                    dataType: "json",
+                    contentType: "application/json"
+                });
 
+                var self = this;
+
+                request.done(function (response) {
+
+                    if (self.contests.length === 0)
+                        self.contests = response.items;
+                    else
+                        self.contests = self.contests.concat(response.items);
+
+                    self.hasNextPage = response.hasNextPage;
+
+                    if (response.hasNextPage)
+                        self.pageNumber++
+
+                    if (response.items.length !== 0)
+                        self.hasContests = true;
+
+                });
+            },
+
+            filterContests(filter) {
+                this.contests.length = 0;
+                this.pageNumber = 1;
+                this.hasContests = false;
+                this.isPublished = filter;
+                this.getContests();
+            },
+
+            publishContest(id) {
+                var request = $.ajax({
+                    url: "/contests/" + id + "/publish",
+                    method: "POST",
+                    data: { id: id },
+                    dataType: "json",
+                    contentType: "application/json"
+                });
+
+                request.done(function () {
+                    this.contests = this.contests.filter(contest => contest.id !== id);
+                });
+
+                request.fail(function () {
+
+                });
+            }
         }
     });
+
 </script>

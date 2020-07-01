@@ -72,8 +72,6 @@
         data: {
             hasContests: false,
             hasNextPage: true,
-            pageNumber: 1,
-            pageSize: 15,
             search: "",
             sort: "Popular",
             city: "",
@@ -85,13 +83,13 @@
         methods: {
 
             getContests() {
-
                 var request = $.ajax({
                     url: "/contests",
                     method: "GET",
                     data: {
-                        pageNumber: this.pageNumber,
-                        pageSize: this.pageSize,
+                        pageNumber: 1,
+                        pageSize: 15,
+                        isPublished: true,
                         search: this.search,
                         sort: this.sort,
                         city: this.city
@@ -116,30 +114,23 @@
 
                     if (response.items.length !== 0)
                         self.hasContests = true;
-
                 });
-
             },
 
             filterContests() {
-
                 this.contests.length = 0;
                 this.pageNumber = 1;
                 this.hasContests = false;
                 this.getContests();
-
             },
 
             sortContests(sort) {
-
                 this.contests.length = 0;
                 this.pageNumber = 1;
                 this.hasContests = false;
                 this.sort = sort;
                 this.getContests();
-
             }
-
         }
     })
 

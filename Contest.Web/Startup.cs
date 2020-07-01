@@ -32,9 +32,7 @@ namespace Contest.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddRazorRuntimeCompilation();
-
             services.AddDbContext<ContestContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ContestContext")));
-
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ContestContext>();
 
             var mappingConfiguration = new MapperConfiguration(mc =>
@@ -44,7 +42,6 @@ namespace Contest.Web
 
             IMapper mapper = mappingConfiguration.CreateMapper();
             services.AddSingleton(mapper);
-
             services.AddScoped<IContestService, ContestService>();
             services.AddScoped<IImageService, ImageService>();
         }
@@ -57,13 +54,9 @@ namespace Contest.Web
             }
 
             app.UseRouting();
-            
             app.UseAuthentication();
-
             app.UseAuthorization();
-
             app.UseStaticFiles();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
