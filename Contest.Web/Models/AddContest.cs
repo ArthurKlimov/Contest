@@ -22,8 +22,6 @@ namespace Contest.Web.Models
         [StringLength(75)]
         public string City { get; set; }
 
-        public IFormFile CoverImage { get; set; }
-
         public bool AcrossCountry { get; set; }
     }
 }

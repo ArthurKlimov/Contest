@@ -9,12 +9,11 @@ namespace Contest.BL.Dto
 
         }
 
-        public ContestDto(DateTime endDate, string title, string link, string city, bool acrossCountry, byte[] cover)
+        public ContestDto(DateTime endDate, string title, string link, string city, bool acrossCountry)
         {
             Title = title;
             EndDate = endDate;
             Link = link;
-            Cover = cover;
             City = city;
             AcrossCountry = acrossCountry;
         }
@@ -24,10 +23,10 @@ namespace Contest.BL.Dto
         public DateTime? PublishDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Link { get; set; }
-        public byte[] Cover { get; set; }
+        //public byte[] Cover { get; set; }
         public string PublishDateString { get; set; }
         public string EndDateString { get; set; }
-        public string CoverPath { get; set; }
+        //public string CoverPath { get; set; }
         public bool IsPublished { get; set; }
         public int Views { get; set; }
         public string City { get; set; }

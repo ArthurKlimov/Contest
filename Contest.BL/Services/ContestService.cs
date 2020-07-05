@@ -20,13 +20,11 @@ namespace Contest.BL.Services
     {
         private readonly ContestContext _db;
         private readonly IMapper _mapper;
-        private readonly IImageService _imageService;
 
-        public ContestService(ContestContext db, IMapper mapper, IImageService imageService)
+        public ContestService(ContestContext db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
-            _imageService = imageService;
         }
 
         public async Task AddContest(ContestDto dto)
@@ -37,7 +35,8 @@ namespace Contest.BL.Services
             _db.Contests.Add(entity);
             await _db.SaveChangesAsync();
 
-            await _imageService.UploadContestCover(dto.Cover, entity.Id);
+            //if (dto.Cover != null)
+            //    await _imageService.UploadContestCover(dto.Cover, entity.Id);
         }
 
         public async Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto)
@@ -54,12 +53,14 @@ namespace Contest.BL.Services
                 query = query.Where(e => e.Title.Contains(dto.Search));
 
             if (!string.IsNullOrWhiteSpace(dto.City))
-                query = query.Where(x => x.City.Contains(dto.City));
+                query = query.Where(x => x.City.Contains(dto.City)  || x.AcrossCountry);
 
             if (sort == ContestsSortType.Popular)
                 query = query.OrderByDescending(e => e.Views);
             else if (sort == ContestsSortType.Old)
                 query = query.OrderBy(e => e.PublishDate);
+            else if (sort == ContestsSortType.AlmostClosed)
+                query = query.OrderBy(e => e.EndDate);
             else
                 query = query.OrderByDescending(e => e.PublishDate);
 

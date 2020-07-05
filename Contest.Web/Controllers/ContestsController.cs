@@ -33,38 +33,12 @@ namespace Contest.Web.Controllers
             if (!ModelState.IsValid || (!model.AcrossCountry && string.IsNullOrWhiteSpace(model.City)))
                 return BadRequest();
 
-            byte[] coverBytes = null;
-
-            if (model.CoverImage != null)
-            {
-                if (!model.CoverImage.ContentType.StartsWith("image/"))
-                    return BadRequest();
-
-                coverBytes = model.CoverImage.OpenReadStream().GetBytes();
-                if (coverBytes.Length > 5242880)
-                    return BadRequest();
-            }
-
             try
             {
-                await _contestService.AddContest(new ContestDto(model.EndDate, model.Title, model.Link, 
-                    model.City, model.AcrossCountry, coverBytes));
+                await _contestService.AddContest(new ContestDto(model.EndDate, model.Title, model.Link, model.City, model.AcrossCountry));
                 return Ok();
             }
             catch (Exception)
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetContests([FromQuery] GetContestsDto dto)
-        {
-            try
-            {
-                return Json(await _contestService.GetContests(dto));
-            }
-            catch (BadRequestException)
             {
                 return BadRequest();
             }

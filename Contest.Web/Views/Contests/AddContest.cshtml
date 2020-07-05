@@ -2,8 +2,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div id="AddContestApp" class="container">
-    <form v-on:submit="validateForm" enctype="multipart/form-data">
-        <div class="row mt-3">
+    <form ref="form" v-on:submit="validateForm" enctype="multipart/form-data">
+        <div class="row mt-4">
             <div class="col-6 border rounded p-4" style="background-color: #FFF">
                 <input type="text" class="form-control" v-model="contest.title"
                        v-bind:class="{ 'is-invalid': !isTitleValid && hasSubmitted }">
@@ -30,8 +30,8 @@
                     </label>
                 </div>
                 <input type="text" class="form-control mt-2" id="city"
-                       v-model="contest.city"
-                       v-bind:class="{ 'is-invalid': !isCityValid && hasSubmitted }">
+                       v-bind:class="{ 'is-invalid': !isCityValid && hasSubmitted }"
+                       v-bind:disabled="contest.acrossCountry">
                 <small class="text-muted">Населённый пункт</small>
                 <div class="custom-file mt-2">
                     <input id="coverImage" type="file" ref="file" class="custom-file-input"
@@ -44,12 +44,20 @@
                 </div>
             </div>
             <div class="col-6">
-                <h4>Спасибо, что пользуетесь наш сервисом!</h4>
-                <p>Много текста текста текста текста</p>
+                <h1 style="font-size: 1.5em;">Mix Prize — это онлайн каталог для поиска розыгрышей призов и конкурсов.</h1>
+                <p>Добавляя контент на наш сайт, вы привлекаете аудиторию для вашего бренда. Публикация полностью бесплатная.</p>
+                <ul>
+                    <li>Поля «название, дата завершения и ссылка» обязательны для заполнения.</li>
+                    <li>Поле «ссылка» должно содержать ссылку на пост в социальных сетях.</li>
+                    <li>Укажите, в каком населенном пунткте проходит розыгрыш призов или конкурс, или поставьте галочку "по всей России".</li>
+                    <li>Вы можете загрузить рекламную обложку для конкурса или розыгрыша.</li>
+                </ul>
             </div>
         </div>
     </form>
 </div>
+@await Html.PartialAsync("AddContest/_SuccessModal")
+@await Html.PartialAsync("AddContest/_FailModal")
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
 <script>
@@ -101,25 +109,16 @@
                         contentType: false,
                         processData: false
                     });
-
-                    request.done();
-                    request.fail();
+                    request.done(function () {
+                        $('#successModal').modal('show');
+                    });
+                    request.fail(function () {
+                        $('#failModal').modal('show');
+                    });
                 }
             }
         }
     });
-
-    var defaultFormatResult = $.Suggestions.prototype.formatResult;
-
-    function formatResult(value, currentValue, suggestion, options) {
-        var newValue = suggestion.data.city;
-        suggestion.value = newValue;
-        return defaultFormatResult.call(this, newValue, currentValue, suggestion, options);
-    }
-
-    function formatSelected(suggestion) {
-        return suggestion.data.city;
-    }
 
     $("#city").suggestions({
 
@@ -130,10 +129,12 @@
         constraints: {
             locations: { city_type_full: "город" }
         },
-        formatResult: formatResult,
-        formatSelected: formatSelected,
         onSelectNothing: function () {
             $(this).val("");
+        },
+        onSelect: function (suggestion) {
+            $(this).val(suggestion.data.city);
+            AddContestApp._data.contest.city = suggestion.data.city;
         }
     });
 
@@ -141,4 +142,6 @@
         var fileName = $(this).val().replace('C:\\fakepath\\', " ");
         $(this).next('.custom-file-label').html(fileName);
     })
+
+    $('#addContestButton').hide();
 </script>

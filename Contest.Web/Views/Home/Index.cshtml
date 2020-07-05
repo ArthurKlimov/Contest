@@ -1,72 +1,164 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="m-0 p-0 mb-4">
+    <div class="w-100 d-flex align-items-center" style="height: 42.5em; background-image: url('images/background.jpg'); background-size: auto, cover; background-position-y: -3.5em; background-repeat: no-repeat;">
+        <div class="container">
+            <h1 class="text-white w-100">Розыгрыши призов <br /> и онлайн конкурсы</h1>
+            <h3 class="text-white w-100 font-weight-light">у вас в городе или по всей России</h3>
+            <button id="searchButton" class="btn btn-primary mt-4" style="width:10em;">Найти</button>
+        </div>
+    </div>
+</div>
 <div id="IndexApp">
-    <div class="container border p-3" style="background-color: #fff;">
-        <div class="row pl-4">
-            <h1>25000 онлайн-конкурсов по всей России</h1>
-        </div>
-        <div class="row mt-3">
-            <div class="pl-4" style="width: 35em;">
-                <input type="text" class="form-control border-secondary"
-                       placeholder="Поиск по конкурсам и розыгрышам"
-                       name="search" v-model="search" style="outline: none;">
+    <div id="searchBlock" class="container border p-4" style="background-color: #fff;">
+        <div class="row">
+            <div class="col-6">
+                <input type="text" class="form-control" placeholder="Поиск по ключевым слова" style="outline: none;" v-model="search">
             </div>
-            <input type="text" class="form-control border-secondary ml-4"
-                    name="city" id="city" style="width: 20em;" placeholder="Поиск по городу"
-                   v-model="city">
-
-            <button v-on:click="filterContests" type="submit" class="btn btn-primary ml-4"
-                    style="width: 10em">
-                Найти
-            </button>
+            <div class="col-4">
+                <input type="text" class="form-control" id="city" placeholder="Поиск по населенному пункту" v-model="city">
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary w-100" v-on:click="filterContests">Найти</button>
+            </div>
         </div>
-        <div class="row pl-4 mt-4">
-            <ul class="nav nav-pills">
-                <li class="nav-item">
-                    <a v-on:click="sortContests('Popular')" v-bind:class="{ active: sort == 'Popular' }" class="nav-link" href="#">Популярные</a>
-                </li>
-                <li class="nav-item">
-                    <a v-on:click="sortContests('New')" v-bind:class="{ active: sort == 'New' }" class="nav-link" href="#">Новые</a>
-                </li>
-                <li class="nav-item">
-                    <a v-on:click="sortContests('Old')" v-bind:class="{ active: sort == 'Old' }" class="nav-link" href="#">Старые</a>
-                </li>
-            </ul>
+        <div class="row mt-4">
+            <div class="col d-flex justify-content-center align-items-center">
+                <p class="text-primary mb-0" style="cursor: pointer;" v-on:click="sortContests('Popular')" v-if="sort !== 'Popular'">Популярные</p>
+                <p class="btn btn-outline-primary mb-0" style="cursor: pointer;" v-else>Популярные</p>
+                <p class="text-primary mb-0 ml-4" style="cursor: pointer;" v-on:click="sortContests('New')" v-if="sort !== 'New'">Новые</p>
+                <p class="btn btn-outline-primary mb-0 ml-4" style="cursor: pointer;" v-else>Новые</p>
+                <p class="text-primary mb-0 ml-4" style="cursor: pointer;" v-on:click="sortContests('Old')" v-if="sort !== 'Old'">Старые</p>
+                <p class="btn btn-outline-primary mb-0 ml-4" style="cursor: pointer;" v-else>Старые</p>
+                <p class="text-primary mb-0 ml-4" style="cursor: pointer;" v-on:click="sortContests('AlmostClosed')" v-if="sort !== 'AlmostClosed'">Почти закончились</p>
+                <p class="btn btn-outline-primary mb-0 ml-4" style="cursor: pointer;" v-else>Почти закончились</p>
+            </div>
         </div>
     </div>
     <div class="container">
         <div class="row">
-            <div v-if="hasContests" v-for="contest in contests" v-bind:key="contest.id" class="col-4 mt-4">
-                <div class="card" style="height: 27em;">
-                    <img :src="contest.coverPath" class="card-img-top h-50 w-100" style="object-fit: cover">
-                    <div class="d-flex flex-column card-body h-50">
-                        <div class="card-title d-flex justify-content-between">
-                            <div>
-                                <p class="mb-0 text-secondary"><i class="far fa-clock"></i> {{ contest.endDateString }}</p>
-                                <p class="mb-0 text-secondary"> {{ contest.publishDateString }}</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="mb-0 text-secondary"><i class="far fa-eye"></i>  {{ contest.views }}</p>
-                                <p class="mb-0 text-primary"> {{ contest.city }}</p>
-                            </div>
+            <div class="col-6 mt-4">
+                <div class="card w-100">
+                    <div class="row no-gutters">
+                        <div class="col-4 border-right p-4 d-flex flex-column">
+                            <p class="mb-1"><i class="far fa-calendar-check"></i> 26 августа</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Петрозаводск</p>
+                            <a class="btn btn-primary mt-auto" href="/">Подробнее</a>
                         </div>
-                        <p class="card-text">{{ contest.title }}</p>
-                        <div class="d-flex justify-content-center mt-auto">
-                            <a :href="'contest/'+contest.id" class="btn btn-outline-primary w-50">Подробнее</a>
+                        <div class="col-8 d-flex flex-column p-4">
+                            <h6 class="">Организатор: huyzalupa9699759</h6>
+                            <p class="card-text font">So by colonel hearted ferrars. If in so bred at dare rose lose good. Indulgence contrasted sufficie</p>
+                            <div class="d-flex justify-content-between mt-auto">
+                                <p class="mb-0 text-muted"> 1 августа 00:12</p>
+                                <p class="mb-0 text-muted"><i class="far fa-eye"></i> 123</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-6 mt-4">
+                <div class="card w-100">
+                    <div class="row no-gutters">
+                        <div class="col-4 border-right p-4 d-flex flex-column">
+                            <p class="mb-1"><i class="far fa-calendar-check"></i> 26 августа</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Петрозаводск</p>
+                            <a class="btn btn-primary mt-auto" href="/">Подробнее</a>
+                        </div>
+                        <div class="col-8 d-flex flex-column p-4">
+                            <h6 class="">Организатор: huyzalupa9699759</h6>
+                            <p class="card-text font">So by colonel hearted ferrars. If in so bred at dare rose lose good. Indulgence contrasted sufficie</p>
+                            <div class="d-flex justify-content-between mt-auto">
+                                <p class="mb-0 text-muted"> 1 августа 00:12</p>
+                                <p class="mb-0 text-muted"><i class="far fa-eye"></i> 123</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mt-4">
+                <div class="card w-100">
+                    <div class="row no-gutters">
+                        <div class="col-4 border-right p-4 d-flex flex-column">
+                            <p class="mb-1"><i class="far fa-calendar-check"></i> 26 августа</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Петрозаводск</p>
+                            <a class="btn btn-primary mt-auto" href="/">Подробнее</a>
+                        </div>
+                        <div class="col-8 d-flex flex-column p-4">
+                            <h6 class="">Организатор: huyzalupa9699759</h6>
+                            <p class="card-text font">So by colonel hearted ferrars. If in so bred at dare rose lose good. Indulgence contrasted sufficie</p>
+                            <div class="d-flex justify-content-between mt-auto">
+                                <p class="mb-0 text-muted"> 1 августа 00:12</p>
+                                <p class="mb-0 text-muted"><i class="far fa-eye"></i> 123</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mt-4">
+                <div class="card w-100">
+                    <div class="row no-gutters">
+                        <div class="col-4 border-right p-4 d-flex flex-column">
+                            <p class="mb-1"><i class="far fa-calendar-check"></i> 26 августа</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Петрозаводск</p>
+                            <a class="btn btn-primary mt-auto" href="/">Подробнее</a>
+                        </div>
+                        <div class="col-8 d-flex flex-column p-4">
+                            <h6 class="">Организатор: huyzalupa9699759</h6>
+                            <p class="card-text font">So by colonel hearted ferrars. If in so bred at dare rose lose good. Indulgence contrasted sufficie</p>
+                            <div class="d-flex justify-content-between mt-auto">
+                                <p class="mb-0 text-muted"> 1 августа 00:12</p>
+                                <p class="mb-0 text-muted"><i class="far fa-eye"></i> 123</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div v-if="hasContests" v-for="contest in contests" v-bind:key="contest.id" class="col-4 mt-4">
+            <div class="card" style="height: 27em;">
+                <img :src="contest.coverPath" class="card-img-top h-50 w-100" style="object-fit: cover" v-if="contest.coverPath">
+                <div class="h-50 d-flex justify-content-center align-items-center" v-else>
+                    <i class="fas fa-gift fa-5x"></i>
+                </div>
+                <div class="d-flex flex-column card-body h-50">
+                    <div class="card-title d-flex justify-content-between">
+                        <div>
+                            <p class="mb-0 text-secondary"><i class="far fa-calendar-check"></i> {{ contest.endDateString }}</p>
+                            <p class="mb-0 text-secondary"><i class="far fa-clock"></i> {{ contest.publishDateString }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="mb-0 text-primary" v-if="!contest.acrossCountry"> {{ contest.city }}</p>
+                            <p class="mb-0 text-primary" v-else>по всей России</p>
+                            <p class="mb-0 text-secondary"><i class="far fa-eye"></i>  {{ contest.views }}</p>
+                        </div>
+                    </div>
+                    <p class="card-text">{{ contest.title }}</p>
+                    <div class="d-flex justify-content-center mt-auto">
+                        <a :href="'contest/'+contest.id" class="btn btn-outline-primary w-50">Перейти</a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
         </div>
         <div v-if="hasContests && hasNextPage" class="row justify-content-center mt-4">
             <div class="col-4">
                 <button v-on:click="getContests" class="btn btn-primary w-100">Показать еще</button>
             </div>
         </div>
+        <div v-if="!hasContests">
+            <div class="row d-flex justify-content-center mt-4">
+                <div>
+                    <p class="font-weight-bolder"><i class="fas fa-exclamation-circle"></i> Извините, по вашему запросу ничего не найдено.</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script>
+    $("#searchButton").click(function () {
+        $('html,body').animate({ scrollTop: $("#searchBlock").offset().top - 110 },'slow');
+    });
+
     var IndexApp = new Vue({
         el: '#IndexApp',
         data: {

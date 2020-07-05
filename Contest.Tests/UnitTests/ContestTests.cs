@@ -16,7 +16,6 @@ namespace Contest.Tests.UnitTests
         private IContestService _contestService;
         private ContestContext _db;
         private IMapper _mapper;
-        private IImageService _imageService;
 
         [SetUp]
         public void SetUp()
@@ -31,20 +30,20 @@ namespace Contest.Tests.UnitTests
             var options = new DbContextOptionsBuilder<ContestContext>().UseSqlServer(connectionString).Options;
             _db = new ContestContext(options);
 
-            _contestService = new ContestService(_db, _mapper, _imageService);
+            _contestService = new ContestService(_db, _mapper);
         }
 
-        [Test]
-        public void AddContests()
-        {
-            var dto = new ContestDto(new DateTime(2020, 7, 1), "Тестовый розыгрыш", "Описание розагрыша", "https://vk.com/friends", null);
+        //[Test]
+        //public void AddContests()
+        //{
+        //    var dto = new ContestDto(new DateTime(2020, 7, 1), "Тестовый розыгрыш", "Описание розагрыша", "https://vk.com/friends");
 
-            for (var i = 0; i < 30; i++)
-            {
-                 _contestService.AddContest(dto);
-            }
+        //    for (var i = 0; i < 30; i++)
+        //    {
+        //         _contestService.AddContest(dto);
+        //    }
 
-            Assert.True(true);
-        }
+        //    Assert.True(true);
+        //}
     }
 }

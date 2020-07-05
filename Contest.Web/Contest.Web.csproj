@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\covers\" />
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>

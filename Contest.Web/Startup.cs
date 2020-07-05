@@ -43,7 +43,7 @@ namespace Contest.Web
             IMapper mapper = mappingConfiguration.CreateMapper();
             services.AddSingleton(mapper);
             services.AddScoped<IContestService, ContestService>();
-            services.AddScoped<IImageService, ImageService>();
+            //services.AddScoped<IImageService, ImageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

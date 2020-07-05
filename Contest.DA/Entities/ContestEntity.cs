@@ -12,7 +12,6 @@ namespace Contest.DA.Entities
         public DateTime EndDate { get; set; }
         public DateTime? PublishDate { get; set; }
         public int Views { get; set; }
-        public string CoverPath { get; set; }
         public bool IsPublished { get; set; }
         public string City { get; set; }
         public bool AcrossCountry { get; set; }
