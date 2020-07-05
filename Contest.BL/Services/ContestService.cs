@@ -34,9 +34,6 @@ namespace Contest.BL.Services
 
             _db.Contests.Add(entity);
             await _db.SaveChangesAsync();
-
-            //if (dto.Cover != null)
-            //    await _imageService.UploadContestCover(dto.Cover, entity.Id);
         }
 
         public async Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto)
