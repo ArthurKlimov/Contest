@@ -4,20 +4,6 @@ namespace Contest.BL.Dto
 {
     public class ContestDto
     {
-        public ContestDto()
-        {
-
-        }
-
-        public ContestDto(DateTime endDate, string title, string link, string city, bool acrossCountry)
-        {
-            Title = title;
-            EndDate = endDate;
-            Link = link;
-            City = city;
-            AcrossCountry = acrossCountry;
-        }
-
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime? PublishDate { get; set; }
@@ -29,5 +15,6 @@ namespace Contest.BL.Dto
         public int Views { get; set; }
         public string City { get; set; }
         public bool AcrossCountry { get; set; }
+        public string Organizator { get; set; }
     }
 }

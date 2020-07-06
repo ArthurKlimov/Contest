@@ -12,7 +12,7 @@ namespace Contest.Web.Models
         public DateTime EndDate { get; set; }
 
         [Required]
-        [StringLength(140, MinimumLength = 1)]
+        [StringLength(100, MinimumLength = 1)]
         public string Title { get; set; }
 
         [Required]
@@ -23,5 +23,9 @@ namespace Contest.Web.Models
         public string City { get; set; }
 
         public bool AcrossCountry { get; set; }
+
+        [Required]
+        [StringLength(20, MinimumLength = 1)]
+        public string Organizator { get; set; }
     }
 }

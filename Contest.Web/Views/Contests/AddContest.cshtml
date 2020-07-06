@@ -5,23 +5,25 @@
     <form ref="form" v-on:submit="validateForm" enctype="multipart/form-data">
         <div class="row mt-4">
             <div class="col-6 border rounded p-4" style="background-color: #FFF">
-                <input type="text" class="form-control" v-model="contest.title"
-                       v-bind:class="{ 'is-invalid': !isTitleValid && hasSubmitted }">
-                <small class="text-muted">* Название</small>
+                <input type="text" class="form-control" v-model="contest.organizator"
+                       v-bind:class="{ 'is-invalid': !isOrganizatorValid && hasSubmitted }">
+                <small class="text-muted">* Организатор</small>
+
                 <div class="row mt-2">
+                    <div class="col-7">
+                        <input type="text" class="form-control"
+                               v-model="contest.link"
+                               v-bind:class="{ 'is-invalid': !isLinkValid && hasSubmitted }">
+                        <small class="text-muted">* Ссылка на пост</small>
+                    </div>
                     <div class="col-5">
                         <input type="date" class="form-control" min="2020-01-01" max="2021-12-31"
                                v-model="contest.endDate"
                                v-bind:class="{ 'is-invalid': !isEndDateValid && hasSubmitted }" />
                         <small class="text-muted">* Дата завершения</small>
                     </div>
-                    <div class="col-7">
-                        <input type="text" class="form-control"
-                               v-model="contest.link"
-                               v-bind:class="{ 'is-invalid': !isLinkValid && hasSubmitted }">
-                        <small class="text-muted">* Ссылка</small>
-                    </div>
                 </div>
+
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" id="acrossCountry" style="margin-top: 0.5em;"
                            v-model="contest.acrossCountry">
@@ -29,6 +31,17 @@
                         по всей России
                     </label>
                 </div>
+
+                <input type="text" class="form-control mt-2" id="city"
+                       v-bind:class="{ 'is-invalid': !isCityValid && hasSubmitted }"
+                       v-bind:disabled="contest.acrossCountry">
+                <small class="text-muted">Населённый пункт</small>
+
+                <textarea type="text" class="form-control mt-2" v-model="contest.title"
+                          v-bind:class="{ 'is-invalid': !isTitleValid && hasSubmitted }">
+                </textarea>
+                <small class="text-muted">* Краткое описание</small>
+
                 <div class="d-flex justify-content-center mt-2">
                     <input type="submit" class="btn btn-outline-primary w-25" value="Добавить">
                 </div>
@@ -37,9 +50,9 @@
                 <h1 style="font-size: 1.5em;">Mix Prize — это онлайн каталог для поиска розыгрышей призов и конкурсов.</h1>
                 <p>Добавляя контент на наш сайт, вы привлекаете аудиторию для вашего бренда. Публикация полностью бесплатная.</p>
                 <ul>
-                    <li>Поля «название, дата завершения и ссылка» обязательны для заполнения.</li>
-                    <li>Поле «ссылка» должно содержать ссылку на пост в социальных сетях.</li>
-                    <li>Укажите, в каком населенном пунткте проходит розыгрыш призов или конкурс, или поставьте галочку "по всей России".</li>
+                    <li>Все поля обязательны для заполнения.</li>
+                    <li>Поле «ссылка на пост» должно содержать ссылку на пост в социальных сетях.</li>
+                    <li>Укажите, в каком населенном пунткте проходит ваш конкурс или розыгрыш призов, или поставьте галочку "по всей России".</li>
                 </ul>
             </div>
         </div>
@@ -58,22 +71,25 @@
                 endDate: "",
                 city: "",
                 link: "",
+                organizator: "",
                 acrossCountry: true
             },
             isTitleValid: false,
             isEndDateValid: false,
             isCityValid: false,
             isLinkValid: false,
+            isOrganizatorValid: false,
             hasSubmitted: false,
         },
         methods: {
             validateForm(event) {
                 event.preventDefault();
                 this.hasSubmitted = true;
-                this.isTitleValid = (this.contest.title.length && this.contest.title.length <= 140) ? true : false;
+                this.isTitleValid = (this.contest.title.length && this.contest.title.length <= 100) ? true : false;
                 this.isEndDateValid = (this.contest.endDate.length) ? true : false;
                 this.isCityValid = (this.contest.city.length <= 75) ? true : false;
                 this.isLinkValid = (this.contest.link.length && this.contest.link.length <= 75) ? true : false;
+                this.isOrganizatorValid = (this.contest.organizator.length && this.contest.organizator.length <= 20) ? true : false;
 
                 if (this.isTitleValid && this.isEndDateValid && this.isCityValid && this.isLinkValid) {
                     var formData = new FormData();
@@ -82,6 +98,7 @@
                     formData.append('city', this.contest.city);
                     formData.append('link', this.contest.link);
                     formData.append('acrossCountry', this.contest.acrossCountry);
+                    formData.append('organizator', this.contest.organizator);
 
                     var request = $.ajax({
                         url: "/contests/add",

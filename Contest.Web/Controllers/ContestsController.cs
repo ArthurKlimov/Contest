@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Contest.BL.Dto;
 using Contest.BL.Exceptions;
 using Contest.BL.Extensions;
@@ -13,10 +14,12 @@ namespace Contest.Web.Controllers
     public class ContestsController : Controller
     {
         private readonly IContestService _contestService;
+        private readonly IMapper _mapper;
 
-        public ContestsController(IContestService contestService)
+        public ContestsController(IContestService contestService, IMapper mapper)
         {
             _contestService = contestService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -35,7 +38,7 @@ namespace Contest.Web.Controllers
 
             try
             {
-                await _contestService.AddContest(new ContestDto(model.EndDate, model.Title, model.Link, model.City, model.AcrossCountry));
+                await _contestService.AddContest(_mapper.Map<AddContest, ContestDto>(model));
                 return Ok();
             }
             catch (Exception)
@@ -45,6 +48,7 @@ namespace Contest.Web.Controllers
         }
 
         [HttpGet]
+        [Route("all")]
         public async Task<IActionResult> GetContests([FromQuery] GetContestsDto dto)
         {
             try
@@ -58,7 +62,7 @@ namespace Contest.Web.Controllers
         }
 
         [HttpGet]
-        [Route("contest/{id}")]
+        [Route("contests/{id}")]
         public async Task<IActionResult> GetContest([FromRoute] int id)
         {
             try
@@ -88,7 +92,7 @@ namespace Contest.Web.Controllers
         }
 
         [HttpPost]
-        [Route("contest/{id}/hide")]
+        [Route("{id}/hide")]
         public async Task<IActionResult> HideContest([FromRoute] int id)
         {
             try
@@ -103,7 +107,7 @@ namespace Contest.Web.Controllers
         }
 
         [HttpDelete]
-        [Route("contest/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteContest([FromRoute] int id)
         {
             try

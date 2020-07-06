@@ -15,5 +15,6 @@ namespace Contest.DA.Entities
         public bool IsPublished { get; set; }
         public string City { get; set; }
         public bool AcrossCountry { get; set; }
+        public string Organizator { get; set; }
     }
 }
