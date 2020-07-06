@@ -45,6 +45,19 @@ namespace Contest.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetContests([FromQuery] GetContestsDto dto)
+        {
+            try
+            {
+                return Json(await _contestService.GetContests(dto));
+            }
+            catch (BadRequestException)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
         [Route("contest/{id}")]
         public async Task<IActionResult> GetContest([FromRoute] int id)
         {
