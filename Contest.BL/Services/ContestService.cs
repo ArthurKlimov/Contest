@@ -12,7 +12,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Contest.BL.Enums;
-using System.Security.Cryptography;
 
 namespace Contest.BL.Services
 {

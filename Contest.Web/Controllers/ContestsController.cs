@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AutoMapper;
 using Contest.BL.Dto;
@@ -15,11 +16,15 @@ namespace Contest.Web.Controllers
     {
         private readonly IContestService _contestService;
         private readonly IMapper _mapper;
+        private readonly HtmlEncoder _htmlEncoder;
 
-        public ContestsController(IContestService contestService, IMapper mapper)
+
+        public ContestsController(IContestService contestService, IMapper mapper, 
+                                  HtmlEncoder htmlEncoder, UrlEncoder urlEncoder)
         {
             _contestService = contestService;
             _mapper = mapper;
+            _htmlEncoder = htmlEncoder;
         }
 
         [HttpGet]
@@ -35,6 +40,11 @@ namespace Contest.Web.Controllers
         {
             if (!ModelState.IsValid || (!model.AcrossCountry && string.IsNullOrWhiteSpace(model.City)))
                 return BadRequest();
+
+            model.Title = _htmlEncoder.Encode(model.Title);
+            model.Link = _htmlEncoder.Encode(model.Link);
+            model.City = _htmlEncoder.Encode(model.City);
+            model.Organizator = _htmlEncoder.Encode(model.Organizator);
 
             try
             {
@@ -58,21 +68,6 @@ namespace Contest.Web.Controllers
             catch (BadRequestException)
             {
                 return BadRequest();
-            }
-        }
-
-        [HttpGet]
-        [Route("contests/{id}")]
-        public async Task<IActionResult> GetContest([FromRoute] int id)
-        {
-            try
-            {
-                var contest = await _contestService.GetContest(id);
-                return View(contest);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
             }
         }
 

@@ -9,13 +9,6 @@ namespace Contest.Web.Controllers
     [Route("/")]
     public class HomeController : Controller
     {
-        private readonly IContestService _contestService;
-
-        public HomeController(IContestService contestService)
-        {
-            _contestService = contestService;
-        }
-
         [HttpGet]
         public IActionResult Index()
         {
