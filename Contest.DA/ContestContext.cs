@@ -11,6 +11,17 @@ namespace Contest.DA
             Database.EnsureCreated();
         }
 
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    var firstAdmin = new User()
+        //    {
+        //        UserName = "venuz1337",
+        //        Email = "evklimow@yandex.ru"
+        //    };
+
+        //    var result = await _userManager.CreateAsync(newUser, "123");
+        //}
+
         public DbSet<ContestEntity> Contests { get; set; }
     }
 }

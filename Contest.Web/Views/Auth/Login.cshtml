@@ -1,0 +1,30 @@
+﻿@model string
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 d-flex justify-content-center align-items-center mt-4" style="height: 28em;">
+            <div class="w-100">
+                <form method="post" action="/auth/login">
+                    @if (Model != null)
+                    {
+                        <p class="text-danger">@Model</p>
+                    }
+                    <input type="text" class="form-control w-100">
+                    <small class="text-muted">Логин</small>
+                    <input type="text" class="form-control w-100 mt-2">
+                    <small class="text-muted d-block">Пароль</small>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary w-25 mt-4">Войти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
