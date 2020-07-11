@@ -4,19 +4,19 @@
 <div id="AddContestApp" class="container">
     <form ref="form" v-on:submit="validateForm" enctype="multipart/form-data">
         <div class="row mt-4">
-            <div class="col-6 border rounded p-4" style="background-color: #FFF">
+            <div class="col-md-6 col-sm-12 order-sm-1 order-2 border rounded p-4" style="background-color: #FFF">
                 <input type="text" class="form-control" v-model="contest.organizator"
                        v-bind:class="{ 'is-invalid': !isOrganizatorValid && hasSubmitted }">
                 <small class="text-muted">* Организатор</small>
 
                 <div class="row mt-2">
-                    <div class="col-7">
+                    <div class="col-12 col-xs-12 col-md-7">
                         <input type="text" class="form-control"
                                v-model="contest.link"
                                v-bind:class="{ 'is-invalid': !isLinkValid && hasSubmitted }">
                         <small class="text-muted">* Ссылка на пост</small>
                     </div>
-                    <div class="col-5">
+                    <div class="col-12 col-xs-12 col-md-5">
                         <input type="date" class="form-control" min="2020-01-01" max="2021-12-31"
                                v-model="contest.endDate"
                                v-bind:class="{ 'is-invalid': !isEndDateValid && hasSubmitted }" />
@@ -43,16 +43,16 @@
                 <small class="text-muted">* Краткое описание</small>
 
                 <div class="d-flex justify-content-center mt-2">
-                    <input type="submit" class="btn btn-outline-primary w-25" value="Добавить">
+                    <input type="submit" class="btn btn-outline-primary" value="Добавить">
                 </div>
             </div>
-            <div class="col-6">
-                <h1 style="font-size: 1.5em;">«Mix Prize» — это каталог для поиска онлайн конкурсов и розыгрышей призов.</h1>
-                <p>Вы можете добавить ваш конкурс или розгрыш для привлечения аудитории к вашему бренду. Публикация бесплатная, но ваш контент должен пройти модерацию.</p>
+            <div class="col-md-6 col-sm-12 order-sm-2 order-1 pl-0 pl-sm-0 pl-md-4">
+                <h1 style="font-size: 1.5em;">«Mix Prize» — это каталог для поиска <br> онлайн конкурсов и розыгрышей призов.</h1>
+                <p>Вы можете добавить конкурс или розгрыш для привлечения аудитории к вашему бренду. <br />Публикация бесплатная, но ваш контент должен пройти модерацию.</p>
                 <p>Правила заполнения формы:</p>
                 <ul>
                     <li>Все поля обязательны для заполнения.</li>
-                    <li>Поле «ссылка на пост» должно содержать ссылку на пост в социальных сетях.</li>
+                    <li>Поле «ссылка на пост» должно содержать ссылку на пост <br /> в социальных сетях.</li>
                     <li>Укажите, в каком населенном пункте проходит ваш конкурс или розыгрыш призов, или поставьте галочку "по всей России".</li>
                 </ul>
             </div>

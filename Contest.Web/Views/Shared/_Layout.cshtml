@@ -10,38 +10,35 @@
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="https://kit.fontawesome.com/2ae7c006c6.js" crossorigin="anonymous"></script>
 </head>
-<body style="background-color: #fafafa; padding-top: 5.5em;">
-    <div class="fixed-top border-bottom" style="background-color: #FFF;">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-8">
-                    <nav class="nav align-items-center">
-                        <a href="/" class="nav-link text-dark pl-0"><img style="width: 80px;" class="" src="~/images/logo.png" alt="Логотип MixPrize" /></a>
-                        <a href="#" class="nav-link text-dark">О сервисе</a>
-                        <a href="#" class="nav-link text-dark">Обратная связь</a>
-                        <a href="#" class="nav-link text-dark">Новости</a>
-                    </nav>
-                </div>
-                <div class="col-4 pl-0">
-                    <a id="addContestButton" href="/contests/add" class="nav-link float-right btn btn-primary">
-                        Добавить конкурс или розыгрыш
-                    </a>
-                </div>
+<body style="background-color: #fafafa;">
+    <nav class="navbar navbar-expand-md navbar-light border-bottom bg-white mb-4">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" 
+                data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" 
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">О сервисе</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Обратная связь</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Новости</a>
+                </li>
+            </ul>
+            <div class="form-inline my-2 my-lg-0">
+                <a id="addContestButton" href="/contests/add" class="btn btn-primary my-2 my-sm-0">Добавить конкурс или розыгрыш</a>
             </div>
         </div>
-    </div>
+    </nav>
     @RenderBody()
-    <footer class="mt-4 border-top" style="background-color: #FFF; height: 10em;">
+    <footer class="border-top bg-white">
         <div class="container">
             <div class="row mt-2">
-                <div class="col-11">
-                    <a href="#" class="nav-link text-dark">О сервисе</a>
-                    <a href="#" class="nav-link text-dark">Обратная связь</a>
-                    <a href="#" class="nav-link text-dark">Новости</a>
-                </div>
-                <div class="col-1">
-                    <a href="/" class="nav-link text-dark pl-0"><img style="width: 80px;" class="" src="~/images/logo.png" alt="Логотип MixPrize" /></a>
-                </div>
+
             </div>
         </div>
     </footer>

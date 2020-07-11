@@ -1,60 +1,66 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="mb-4" style="background-color: #fff;">
-    <div class="container p-0">
+
+<link href="~/css/index.css" rel="stylesheet" />
+
+<div id="IndexApp" class="pl-md-0 pl-sm-2 pl-2 pr-md-0 pr-sm-2 pr-2">
+    <div id="searchBlock" class="container border p-4 bg-white">
         <div class="row">
-            <div class="col-7 d-flex align-items-center p-0">
-                <div>
-                    <h1>Выигрывайте в конкурсах <br /> и розыгрышах призов</h1>
-                    <h3 class="font-weight-light">у вас в городе или по всей России</h3>
-                    <button id="searchButton" class="btn btn-primary mt-4" style="width:10em;">Участвовать</button>
-                </div>
+            <div class="col-md-6 col-sm-12 col-12 mb-md-0 mb-sm-2 mb-2">
+                <input type="text" class="form-control" placeholder="Поиск по ключевым словам" 
+                       v-model="search">
             </div>
-            <div class="col-5 p-0">
-                <img class="w-100" style="object-fit: cover; height: 42em;" src="~/images/background-test-2.jpg" alt="Онлайн конкурсы и розыгрыши призов"/>
+            <div class="col-md-4 col-sm-12 col-12 mb-md-0 mb-sm-2 mb-2">
+                <input id="city" type="text" class="form-control" 
+                       placeholder="Поиск по населенному пункту" v-model="city">
             </div>
-        </div>
-    </div>
-</div>
-<div id="IndexApp">
-    <div id="searchBlock" class="container border p-4" style="background-color: #fff;">
-        <div class="row">
-            <div class="col-6">
-                <input type="text" class="form-control" placeholder="Поиск по ключевым слова" style="outline: none;" v-model="search">
-            </div>
-            <div class="col-4">
-                <input type="text" class="form-control" id="city" placeholder="Поиск по населенному пункту" v-model="city">
-            </div>
-            <div class="col-2">
+            <div class="col-md-2">
                 <button type="submit" class="btn btn-primary w-100" v-on:click="filterContests">Найти</button>
             </div>
         </div>
-        <div class="row mt-4">
-            <div class="col d-flex justify-content-center align-items-center">
-                <p class="text-primary mb-0" style="cursor: pointer;" v-on:click="sortContests('Popular')" v-if="sort !== 'Popular'">Популярные</p>
-                <p class="btn btn-outline-primary mb-0" style="cursor: pointer;" v-else>Популярные</p>
-                <p class="text-primary mb-0 ml-4" style="cursor: pointer;" v-on:click="sortContests('New')" v-if="sort !== 'New'">Новые</p>
-                <p class="btn btn-outline-primary mb-0 ml-4" style="cursor: pointer;" v-else>Новые</p>
-                <p class="text-primary mb-0 ml-4" style="cursor: pointer;" v-on:click="sortContests('Old')" v-if="sort !== 'Old'">Старые</p>
-                <p class="btn btn-outline-primary mb-0 ml-4" style="cursor: pointer;" v-else>Старые</p>
-                <p class="text-primary mb-0 ml-4" style="cursor: pointer;" v-on:click="sortContests('AlmostClosed')" v-if="sort !== 'AlmostClosed'">Почти закончились</p>
-                <p class="btn btn-outline-primary mb-0 ml-4" style="cursor: pointer;" v-else>Почти закончились</p>
+        <div class="row mt-md-4 mt-sm-4 mt-4">
+            <div class="col-md-12 col-sm-12 col-12 d-md-flex d-sm-none d-none justify-content-center align-items-center">
+                <p class="text-primary cursor-pointer mb-0" v-on:click="sortContests('Popular')" 
+                   v-if="sort !== 'Popular'">Популярные</p>
+                <p class="btn btn-outline-primary cursor-pointer mb-0" v-else>Популярные</p>
+
+                <p class="text-primary cursor-pointer mb-0 ml-md-4" v-on:click="sortContests('New')" 
+                   v-if="sort !== 'New'">Новые</p>
+                <p class="btn btn-outline-primary mb-0 ml-md-4 cursor-pointer" v-else>Новые</p>
+
+                <p class="text-primary cursor-pointer mb-0 ml-md-4" v-on:click="sortContests('Old')" 
+                   v-if="sort !== 'Old'">Старые</p>
+                <p class="btn btn-outline-primary cursor-pointer mb-0 ml-md-4" v-else>Старые</p>
+
+                <p class="text-primary cursor-pointer mb-0 ml-md-4" v-on:click="sortContests('AlmostClosed')"
+                   v-if="sort !== 'AlmostClosed'">Заканчивающиеся</p>
+                <p class="btn btn-outline-primary cursor-pointer mb-0 ml-md-4" v-else>Заканчивающиеся</p>
+            </div>
+            <div class="col-sm-12 col-12 d-md-none d-sm-block d-block">
+                <select class="custom-select" v-model="sort" v-on:change="sortContests()">
+                    <option value="Popular" selected>Популярные</option>
+                    <option value="New">Новые</option>
+                    <option value="Old">Старые</option>
+                    <option value="AlmostClosed">Заканчивающиеся</option>
+                </select>
             </div>
         </div>
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-6 mt-4" v-if="hasContests" v-for="contest in contests" v-bind:key="contest.id">
+            <div class="col-md-6 mt-4 d-md-block d-sm-none d-none" v-for="contest in contests" v-bind:key="contest.id" v-if="hasContests">
                 <div class="card w-100">
                     <div class="row no-gutters" style="height: 180px;">
-                        <div class="col-4 border-right p-4 d-flex flex-column">
+                        <div class="col-md-4 border-right p-4 d-flex flex-column">
                             <p class="mb-1"><i class="far fa-calendar-check"></i> {{ contest.endDateString }}</p>
+
                             <p v-if="!contest.acrossCountry"><i class="fas fa-map-marker-alt"></i> {{ contest.city }}</p>
                             <p class="mb-2" v-else><i class="fas fa-map-marker-alt"></i> по России</p>
+
                             <a class="btn btn-primary mt-auto" :href="contest.link">Подробнее</a>
                         </div>
-                        <div class="col-8 d-flex flex-column p-4">
+                        <div class="col-md-8 d-flex flex-column p-4">
                             <h6 class="">Организатор: {{ contest.organizator }}</h6>
                             <p class="card-text mb-2">{{contest.title}}</p>
                             <div class="d-flex justify-content-between mt-auto">
@@ -65,9 +71,33 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-12 col-12 mt-4 d-md-none d-sm-block d-block p-0" v-for="contest in contests" v-bind:key="contest.id" v-if="hasContests">
+                <div class="card">
+                    <div class="row no-gutters p-4">
+                        <div class="col-sm-12 col-12 d-flex justify-content-between">
+                            <p><i class="far fa-calendar-check"></i> {{ contest.endDateString }}</p>
+                            <p v-if="!contest.acrossCountry"><i class="fas fa-map-marker-alt"></i> {{ contest.city }}</p>
+                            <p v-else><i class="fas fa-map-marker-alt"></i> по России</p>
+                        </div>
+                        <div class="col-sm-12 col-12">
+                            <h6 class="d-block mb-3">Организатор: {{ contest.organizator }}</h6>
+                        </div>
+                        <div class="col-sm-12 col-12">
+                            <p class="card-text mb-3">{{contest.title}}</p>
+                        </div>
+                        <div class="col-sm-12 col-12 d-flex justify-content-between">
+                            <p class="text-muted"> {{contest.publishDateString}}</p>
+                            <p class="text-muted"><i class="far fa-eye"></i> {{ contest.views}}</p>
+                        </div>
+                        <div class="col-sm-12 col-12">
+                            <a class="btn btn-primary d-block" :href="contest.link">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div v-if="hasContests && hasNextPage" class="row justify-content-center mt-4">
-            <div class="col-4">
+            <div class="col-md-12">
                 <button v-on:click="getContests" class="btn btn-primary w-100">Показать еще</button>
             </div>
         </div>
@@ -80,76 +110,5 @@
         </div>
     </div>
 </div>
-<script>
-    $("#searchButton").click(function () {
-        $('html,body').animate({ scrollTop: $("#searchBlock").offset().top - 110 },'slow');
-    });
 
-    var IndexApp = new Vue({
-        el: '#IndexApp',
-        data: {
-            hasContests: false,
-            hasNextPage: true,
-            search: "",
-            sort: "Popular",
-            city: "",
-            contests: []
-        },
-        created: function () {
-            this.getContests();
-        },
-        methods: {
-
-            getContests() {
-                var request = $.ajax({
-                    url: "/contests/all",
-                    method: "GET",
-                    data: {
-                        pageNumber: 1,
-                        pageSize: 15,
-                        isPublished: true,
-                        search: this.search,
-                        sort: this.sort,
-                        city: this.city
-                    },
-                    dataType: "json",
-                    contentType: "application/json"
-                });
-
-                var self = this;
-
-                request.done(function (response) {
-
-                    if (self.contests.length === 0)
-                        self.contests = response.items;
-                    else
-                        self.contests = self.contests.concat(response.items);
-
-                    self.hasNextPage = response.hasNextPage;
-
-                    if (response.hasNextPage)
-                        self.pageNumber++
-
-                    if (response.items.length !== 0)
-                        self.hasContests = true;
-                });
-            },
-
-            filterContests() {
-                this.contests.length = 0;
-                this.pageNumber = 1;
-                this.hasContests = false;
-                this.getContests();
-            },
-
-            sortContests(sort) {
-                this.contests.length = 0;
-                this.pageNumber = 1;
-                this.hasContests = false;
-                this.sort = sort;
-                this.getContests();
-            }
-        }
-    })
-</script>
-
+<script src="~/js/index.js"></script>

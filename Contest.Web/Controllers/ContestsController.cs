@@ -41,10 +41,10 @@ namespace Contest.Web.Controllers
             if (!ModelState.IsValid || (!model.AcrossCountry && string.IsNullOrWhiteSpace(model.City)))
                 return BadRequest();
 
-            model.Title = _htmlEncoder.Encode(model.Title);
-            model.Link = _htmlEncoder.Encode(model.Link);
-            model.City = _htmlEncoder.Encode(model.City);
-            model.Organizator = _htmlEncoder.Encode(model.Organizator);
+            //model.Title = _htmlEncoder.Encode(model.Title);
+            //model.Link = _htmlEncoder.Encode(model.Link);
+            //model.City = _htmlEncoder.Encode(model.City);
+            //model.Organizator = _htmlEncoder.Encode(model.Organizator);
 
             try
             {

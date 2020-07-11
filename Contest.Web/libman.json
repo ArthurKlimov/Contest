@@ -19,7 +19,7 @@
 }
 ,
 {
-  "library": "popper.js@2.4.3",
+  "library": "popper.js@1.16.0",
   "destination": "wwwroot/lib/popper.js/"
 }
 ]
