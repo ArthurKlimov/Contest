@@ -8,11 +8,11 @@
     <div id="searchBlock" class="container border p-4 bg-white">
         <div class="row">
             <div class="col-md-6 col-sm-12 col-12 mb-md-0 mb-sm-2 mb-2">
-                <input type="text" class="form-control" placeholder="Поиск по ключевым словам" 
+                <input type="text" class="form-control" placeholder="Поиск по ключевым словам"
                        v-model="search">
             </div>
             <div class="col-md-4 col-sm-12 col-12 mb-md-0 mb-sm-2 mb-2">
-                <input id="city" type="text" class="form-control" 
+                <input id="city" type="text" class="form-control"
                        placeholder="Поиск по населенному пункту" v-model="city">
             </div>
             <div class="col-md-2">
@@ -21,15 +21,15 @@
         </div>
         <div class="row mt-md-4 mt-sm-4 mt-4">
             <div class="col-md-12 col-sm-12 col-12 d-md-flex d-sm-none d-none justify-content-center align-items-center">
-                <p class="text-primary cursor-pointer mb-0" v-on:click="sortContests('Popular')" 
+                <p class="text-primary cursor-pointer mb-0" v-on:click="sortContests('Popular')"
                    v-if="sort !== 'Popular'">Популярные</p>
                 <p class="btn btn-outline-primary cursor-pointer mb-0" v-else>Популярные</p>
 
-                <p class="text-primary cursor-pointer mb-0 ml-md-4" v-on:click="sortContests('New')" 
+                <p class="text-primary cursor-pointer mb-0 ml-md-4" v-on:click="sortContests('New')"
                    v-if="sort !== 'New'">Новые</p>
                 <p class="btn btn-outline-primary mb-0 ml-md-4 cursor-pointer" v-else>Новые</p>
 
-                <p class="text-primary cursor-pointer mb-0 ml-md-4" v-on:click="sortContests('Old')" 
+                <p class="text-primary cursor-pointer mb-0 ml-md-4" v-on:click="sortContests('Old')"
                    v-if="sort !== 'Old'">Старые</p>
                 <p class="btn btn-outline-primary cursor-pointer mb-0 ml-md-4" v-else>Старые</p>
 
@@ -111,4 +111,6 @@
     </div>
 </div>
 
+<link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
 <script src="~/js/index.js"></script>

@@ -1,8 +1,4 @@
-﻿$("#searchButton").click(function () {
-    $('html,body').animate({ scrollTop: $("#searchBlock").offset().top - 110 }, 'slow');
-});
-
-var IndexApp = new Vue({
+﻿var IndexApp = new Vue({
     el: '#IndexApp',
     data: {
         hasContests: false,
@@ -69,4 +65,25 @@ var IndexApp = new Vue({
             this.getContests();
         }
     }
-})
+});
+
+$("#city").suggestions({
+    token: "8883f56da5a81a127cba6f4102dbcd72d9ba9078",
+    type: "ADDRESS",
+    hint: false,
+    bounds: "city",
+    constraints: {
+        locations: { city_type_full: "город" }
+    },
+    onSelectNothing: function () {
+        $(this).val("");
+    },
+    onSelect: function (suggestion) {
+        $(this).val(suggestion.data.city);
+        IndexApp._data.city = suggestion.data.city;
+    }
+});
+
+$("#searchButton").click(function () {
+    $('html,body').animate({ scrollTop: $("#searchBlock").offset().top - 110 }, 'slow');
+});
