@@ -35,39 +35,40 @@ namespace Contest.Web.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
         public async Task<IActionResult> AddContest(AddContest model)
         {
             if (!ModelState.IsValid || (!model.AcrossCountry && string.IsNullOrWhiteSpace(model.City)))
                 return BadRequest();
 
-            //model.Title = _htmlEncoder.Encode(model.Title);
-            //model.Link = _htmlEncoder.Encode(model.Link);
-            //model.City = _htmlEncoder.Encode(model.City);
-            //model.Organizator = _htmlEncoder.Encode(model.Organizator);
+            var dto = _mapper.Map<AddContest, ContestDto>(model);
+            await _contestService.AddContest(dto);
 
-            try
-            {
-                await _contestService.AddContest(_mapper.Map<AddContest, ContestDto>(model));
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            return Ok();
         }
 
         [HttpGet]
-        [Route("all")]
         public async Task<IActionResult> GetContests([FromQuery] GetContestsDto dto)
+        {
+            if (!dto.IsValid())
+                return BadRequest();
+
+            var contests = await _contestService.GetContests(dto);
+
+            return Json(contests);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteContest([FromRoute] int id)
         {
             try
             {
-                return Json(await _contestService.GetContests(dto));
+                await _contestService.DeleteContest(id);
+                return Ok();
             }
-            catch (BadRequestException)
+            catch (NotFoundException)
             {
-                return BadRequest();
+                return NotFound();
             }
         }
 
@@ -93,21 +94,6 @@ namespace Contest.Web.Controllers
             try
             {
                 await _contestService.HideContest(id);
-                return Ok();
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> DeleteContest([FromRoute] int id)
-        {
-            try
-            {
-                await _contestService.DeleteContest(id);
                 return Ok();
             }
             catch (NotFoundException)
