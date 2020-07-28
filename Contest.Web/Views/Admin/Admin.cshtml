@@ -4,26 +4,33 @@
 <div class="mt-4" id="AdminApp">
     <div class="container">
         <div class="row">
-            <div class="col-4">
-                <input type="text" class="form-control" placeholder="Поиск по ключевым слова" style="outline: none;" v-model="search">
+            <div class="col-md-3 col-sm-12 col-12 mb-md-0 mb-sm-2 mb-2">
+                <input type="text" class="form-control" placeholder="Поиск по ключевым слова" v-model="search">
             </div>
-            <div class="col-3">
+            <div class="col-md-3 col-sm-12 col-12 mb-md-0 mb-sm-2 mb-2">
                 <input type="text" class="form-control" id="city" placeholder="Поиск по населенному пункту">
             </div>
-            <div class="col-3">
-                <input type="text" class="form-control" placeholder="Поиск по номеру" style="outline: none;">
+            <div class="col-md-3 col-sm-12 col-12 mb-md-0 mb-sm-2 mb-2">
+                <input type="text" class="form-control" placeholder="Поиск по номеру">
             </div>
-            <div class="col-2">
+            <div class="col-md-2 col-sm-12 col-12">
                 <button type="submit" class="btn btn-primary w-100" v-on:click="filterContests">Найти</button>
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-12 d-flex align-items-center">
+            <div class="col-md-12 col-sm-12 col-12 d-md-flex d-sm-none d-none justify-content-center align-items-center">
                 <p class="text-primary mb-0" style="cursor: pointer;" v-on:click="showUnpublished" v-if="isPublished">Скрытые</p>
                 <p class="btn btn-outline-primary mb-0" style="cursor: pointer;" v-else>Скрытые</p>
                 <p class="text-primary mb-0 ml-4" style="cursor: pointer;" v-on:click="showPublished" v-if="!isPublished">Активные</p>
                 <p class="btn btn-outline-primary mb-0 ml-4" style="cursor: pointer;" v-else>Активные</p>
                 <p class="text-primary mb-0 ml-4" style="cursor: pointer;">Закончились</p>
+            </div>
+            <div class="col-sm-12 col-12 d-md-none d-sm-block d-block">
+                <select class="custom-select">
+                    <option selected>Скрытые</option>
+                    <option>Активные</option>
+                    <option>Закончились</option>
+                </select>
             </div>
         </div>
         <div class="row">
