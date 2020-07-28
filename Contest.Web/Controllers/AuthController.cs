@@ -19,11 +19,20 @@ namespace Contest.Web.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ContestContext _db;
 
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, ContestContext db)
+        public AuthController(UserManager<User> userManager, 
+            SignInManager<User> signInManager, ContestContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _db = db;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("login")]
+        public IActionResult Login()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -52,13 +61,6 @@ namespace Contest.Web.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("login")]
-        public IActionResult Login()
-        {
-            return View();
-        }
 
         [HttpPost]
         [Route("login")]

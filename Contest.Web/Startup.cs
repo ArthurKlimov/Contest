@@ -3,6 +3,7 @@ using Contest.BL.Interfaces;
 using Contest.BL.Mappings;
 using Contest.BL.Services;
 using Contest.DA;
+using Contest.DA.Configurations;
 using Contest.DA.Entities;
 using Contest.Web.Mappings;
 using Microsoft.AspNetCore.Builder;
@@ -47,7 +48,7 @@ namespace Contest.Web
             services.AddScoped<IContestService, ContestService>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -64,6 +65,8 @@ namespace Contest.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            ContestDbInitializer.SeedUsers(userManager);
         }
     }
 }
