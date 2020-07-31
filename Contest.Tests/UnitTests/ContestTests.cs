@@ -39,15 +39,24 @@ namespace Contest.Tests.UnitTests
         {
             var dto = new AddContestDto()
             {
-
+                Title = "Новый розыгрыш пицц, суш и ноготочков от Артурчика",
+                Link = "https://vk.com/venuz",
+                City = "Москва",
+                Organizator = "OOO ВЫХЛОП",
+                IsAcrossCountry = false,
+                EndDate = new DateTime(2020, 08, 31)
             };
 
-            for (var i = 0; i < 30; i++)
+            var count = 0;
+
+            do
             {
                 _contestService.AddContest(dto);
+                count++;
             }
+            while (count != 50);
 
-            Assert.True(true);
+            Assert.AreEqual(50, count);
         }
     }
 }
