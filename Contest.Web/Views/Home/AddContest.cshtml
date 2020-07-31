@@ -26,7 +26,7 @@
 
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" id="acrossCountry" style="margin-top: 0.5em;"
-                           v-model="contest.acrossCountry">
+                           v-model="contest.isAcrossCountry">
                     <label class="form-check-label" for="defaultCheck1">
                         по всей России
                     </label>
@@ -34,7 +34,7 @@
 
                 <input type="text" class="form-control mt-2" id="city"
                        v-bind:class="{ 'is-invalid': !isCityValid && hasSubmitted }"
-                       v-bind:disabled="contest.acrossCountry">
+                       v-bind:disabled="contest.isAcrossCountry">
                 <small class="text-muted">Населённый пункт</small>
 
                 <textarea type="text" class="form-control mt-2" v-model="contest.title"
@@ -73,7 +73,7 @@
                 city: "",
                 link: "",
                 organizator: "",
-                acrossCountry: true
+                isAcrossCountry: true
             },
             isTitleValid: false,
             isEndDateValid: false,
@@ -92,22 +92,23 @@
                 this.isLinkValid = (this.contest.link.length && this.contest.link.length <= 75) ? true : false;
                 this.isOrganizatorValid = (this.contest.organizator.length && this.contest.organizator.length <= 20) ? true : false;
 
+                var contest = this.contest;
+
                 if (this.isTitleValid && this.isEndDateValid && this.isCityValid && this.isLinkValid) {
-                    var formData = new FormData();
-                    formData.append('title', this.contest.title);
-                    formData.append('endDate', this.contest.endDate);
-                    formData.append('city', this.contest.city);
-                    formData.append('link', this.contest.link);
-                    formData.append('acrossCountry', this.contest.acrossCountry);
-                    formData.append('organizator', this.contest.organizator);
+                    //var formData = new FormData();
+                    //formData.append('title', this.contest.title);
+                    //formData.append('endDate', this.contest.endDate);
+                    //formData.append('city', this.contest.city);
+                    //formData.append('link', this.contest.link);
+                    //formData.append('acrossCountry', this.contest.acrossCountry);
+                    //formData.append('organizator', this.contest.organizator);
+
 
                     var request = $.ajax({
-                        url: "/contests/add",
+                        url: "api/v1/contests",
                         method: "POST",
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        processData: false
+                        contentType: "application/json",
+                        data: JSON.stringify(contest),
                     });
                     request.done(function () {
                         $('#successModal').modal('show');

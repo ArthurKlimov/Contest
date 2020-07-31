@@ -1,7 +1,7 @@
-﻿namespace Contest.BL.Dto
+﻿namespace Contest.BL.Dto.Contests
 {
-    public class BaseContestDto
+    public abstract class BaseContestDto
     {
-        public int ContestId { get; set; }
+        public abstract bool IsDtoValid();
     }
 }

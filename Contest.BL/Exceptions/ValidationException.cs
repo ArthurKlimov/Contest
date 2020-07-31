@@ -2,7 +2,7 @@
 
 namespace Contest.BL.Exceptions
 {
-    public class ImageProcessingException : Exception
+    public class ValidationException : Exception
     {
     }
 }

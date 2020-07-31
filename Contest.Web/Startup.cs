@@ -5,7 +5,6 @@ using Contest.BL.Services;
 using Contest.DA;
 using Contest.DA.Configurations;
 using Contest.DA.Entities;
-using Contest.Web.Mappings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -39,8 +38,7 @@ namespace Contest.Web
 
             var mappingConfiguration = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new BL.Mappings.ContestProfile());
-                mc.AddProfile(new Mappings.ContestProfile());
+                mc.AddProfile(new ContestProfile());
             });
 
             IMapper mapper = mappingConfiguration.CreateMapper();

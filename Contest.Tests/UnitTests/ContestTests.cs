@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contest.BL.Dto;
+using Contest.BL.Dto.Contests;
 using Contest.BL.Interfaces;
 using Contest.BL.Mappings;
 using Contest.BL.Services;
@@ -33,17 +34,20 @@ namespace Contest.Tests.UnitTests
             _contestService = new ContestService(_db, _mapper);
         }
 
-        //[Test]
-        //public void AddContests()
-        //{
-        //    var dto = new ContestDto(new DateTime(2020, 7, 1), "Тестовый розыгрыш", "Описание розагрыша", "https://vk.com/friends");
+        [Test]
+        public void AddContests()
+        {
+            var dto = new AddContestDto()
+            {
 
-        //    for (var i = 0; i < 30; i++)
-        //    {
-        //         _contestService.AddContest(dto);
-        //    }
+            };
 
-        //    Assert.True(true);
-        //}
+            for (var i = 0; i < 30; i++)
+            {
+                _contestService.AddContest(dto);
+            }
+
+            Assert.True(true);
+        }
     }
 }

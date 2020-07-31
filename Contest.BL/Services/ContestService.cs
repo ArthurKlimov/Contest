@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contest.BL.Dto;
+using Contest.BL.Dto.Contests;
 using Contest.BL.Exceptions;
 using Contest.BL.Extensions;
 using Contest.BL.Interfaces;
@@ -25,17 +26,24 @@ namespace Contest.BL.Services
             _mapper = mapper;
         }
 
-        public async Task AddContest(ContestDto dto)
+        public async Task AddContest(AddContestDto dto)
         {
-            var entity = _mapper.Map<ContestDto, ContestEntity>(dto);
+            if (!dto.IsDtoValid())
+                throw new ValidationException();
+
+            var entity = _mapper.Map<AddContestDto, ContestEntity>(dto);
             entity.IsPublished = false;
 
             _db.Contests.Add(entity);
+
             await _db.SaveChangesAsync();
         }
 
         public async Task<PagedListDto<ContestDto>> GetContests(GetContestsDto dto)
         {
+            if (!dto.IsDtoValid())
+                throw new ValidationException();
+
             var query = _db.Contests
                            .Where(x => x.EndDate >= DateTime.UtcNow && x.IsPublished == dto.IsPublished);
 
@@ -66,7 +74,8 @@ namespace Contest.BL.Services
                 contest.PublishDateString = contest.PublishDate?.ParseToTimeDifference();
             }
 
-            return new PagedListDto<ContestDto>(dto.PageNumber, dto.PageSize, totalCount, contests, dto.Sort, dto.Search);
+            return new PagedListDto<ContestDto>(dto.PageNumber, dto.PageSize, totalCount, 
+                                                contests, dto.Sort, dto.Search);
         }
 
         public async Task DeleteContest(int id)
@@ -79,27 +88,18 @@ namespace Contest.BL.Services
             await _db.SaveChangesAsync();
         }
 
-        public async Task PublishContest(int id)
+        public async Task UpdateContest(ContestDto dto)
         {
-            var entity = await _db.Contests.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _db.Contests.FirstOrDefaultAsync(x => x.Id == dto.Id);
             if (entity == null)
                 throw new NotFoundException();
 
-            entity.IsPublished = true;
-            entity.PublishDate = DateTime.UtcNow;
+            if (!dto.IsDtoValid())
+                throw new ValidationException();
 
-            await _db.SaveChangesAsync();
-        }
+            entity = _mapper.Map<ContestDto, ContestEntity>(dto);
 
-        public async Task HideContest(int id)
-        {
-            var entity = await _db.Contests.FirstOrDefaultAsync(x => x.Id == id);
-            if (entity == null)
-                throw new NotFoundException();
-
-            entity.IsPublished = false;
-            entity.PublishDate = null;
-
+            _db.Contests.Update(entity);
             await _db.SaveChangesAsync();
         }
     }
