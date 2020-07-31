@@ -13,19 +13,19 @@ namespace Contest.BL.Dto.Contests
 
         public override bool IsDtoValid()
         {
-            if (string.IsNullOrWhiteSpace(Title) || Title.Length < 10 || Title.Length > 100)
+            if (string.IsNullOrWhiteSpace(Title) || Title?.Length < 10 || Title?.Length > 100)
                 return false;
 
-            if (string.IsNullOrWhiteSpace(Link) || Link.Length > 100)
+            if (string.IsNullOrWhiteSpace(Link) || Link?.Length > 100)
                 return false;
 
-            if (string.IsNullOrWhiteSpace(Organizator) || Organizator.Length > 20)
+            if (string.IsNullOrWhiteSpace(Organizator) || Organizator?.Length > 20)
                 return false;
 
             if ((!string.IsNullOrWhiteSpace(City) && IsAcrossCountry) || (string.IsNullOrWhiteSpace(City) && !IsAcrossCountry))
                 return false;
 
-            if (City.Length > 20)
+            if (City?.Length > 20)
                 return false;
 
             if (EndDate == default || EndDate.Year < DateTime.Now.Year)

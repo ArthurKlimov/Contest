@@ -35,7 +35,7 @@ namespace Contest.Web.Controllers.API
             }
         }
 
-        public async Task<IActionResult> GetContests(GetContestsDto dto)
+        public async Task<IActionResult> GetContests([FromQuery]GetContestsDto dto)
         {
             try
             {

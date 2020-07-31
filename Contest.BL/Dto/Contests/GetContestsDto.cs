@@ -19,14 +19,14 @@ namespace Contest.BL.Dto
             if (PageSize <= 0)
                 return false;
 
-            if (Search.Length > 100)
+            if (Search?.Length > 100)
                 return false;
 
             if (Sort != "Popular" && Sort != "Old" &&
                 Sort != "AlmostClosed" && Sort != "New")
                 return false;
 
-            if (City.Length > 20)
+            if (City?.Length > 20)
                 return false;
 
             return true;

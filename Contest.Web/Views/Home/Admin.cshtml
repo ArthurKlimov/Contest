@@ -91,16 +91,15 @@
         methods: {
             getContests() {
                 var request = $.ajax({
-                    url: "/contests/all",
+                    url: "api/v1/contests",
                     method: "GET",
                     data: {
                         pageNumber: 1,
                         pageSize: 15,
                         isPublished: this.isPublished,
-                        search: this.search
+                        search: this.search,
+                        sort: "Old"
                     },
-                    dataType: "json",
-                    contentType: "application/json"
                 });
 
                 var self = this;
