@@ -7,11 +7,13 @@ using Contest.DA.Configurations;
 using Contest.DA.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Contest.Web
 {
@@ -32,17 +34,42 @@ namespace Contest.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddRazorRuntimeCompilation();
+            services.AddMvc();
+            
             services.AddDbContext<ContestContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ContestContext")));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ContestContext>();
+            
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequiredLength = 5;
+            })
+                    .AddEntityFrameworkStores<ContestContext>()
+                    .AddDefaultTokenProviders();
+
+            var cookieDomain = "localhost";
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = ".ContestCookie";
+                options.Cookie.Domain = cookieDomain;
+                options.Cookie.HttpOnly = false;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.ExpireTimeSpan = TimeSpan.FromDays(365);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                options.LoginPath = "/auth/login";
+            });
 
             var mappingConfiguration = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new ContestProfile());
             });
-
             IMapper mapper = mappingConfiguration.CreateMapper();
             services.AddSingleton(mapper);
+
             services.AddScoped<IContestService, ContestService>();
         }
 

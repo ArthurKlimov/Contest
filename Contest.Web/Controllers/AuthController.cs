@@ -19,8 +19,8 @@ namespace Contest.Web.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ContestContext _db;
 
-        public AuthController(UserManager<User> userManager, 
-            SignInManager<User> signInManager, ContestContext db)
+        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, 
+                              ContestContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -33,6 +33,30 @@ namespace Contest.Web.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login(LoginUser dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Login) || string.IsNullOrWhiteSpace(dto.Password))
+                return View("Login", "Вы не ввели данные");
+
+            var result = await _signInManager.PasswordSignInAsync(dto.Login, dto.Password, true, false);
+            if (result.Succeeded)
+                return Redirect("/adminPage");
+
+            return View("Login", "Ошибка авторизации");
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok();
         }
 
         [HttpPost]
@@ -59,27 +83,6 @@ namespace Contest.Web.Controllers
             }
 
             return BadRequest(result.Errors);
-        }
-
-
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login(LoginUser dto)
-        {
-            var result = await _signInManager.PasswordSignInAsync(dto.Login, dto.Password, false, false);
-            if (result.Succeeded)
-                return Redirect("/adminPage");
-
-            return View("Ошибка авторизации");
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return Ok();
         }
     }
 }

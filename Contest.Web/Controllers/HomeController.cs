@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Contest.Web.Controllers
 {
@@ -16,6 +17,7 @@ namespace Contest.Web.Controllers
             return View();
         }
 
+        [Authorize]
         [Route("adminPage")]
         public IActionResult Admin()
         {
